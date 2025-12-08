@@ -6,6 +6,7 @@ import Projects from "@/components/Projects";
 import Publications from "@/components/Publications";
 import Skills from "@/components/Skills";
 import Certifications from "@/components/Certifications";
+import Personal from "@/components/Personal";
 import Contact from "@/components/Contact";
 
 export default function Home() {
@@ -33,7 +34,10 @@ export default function Home() {
             {/* 7. CERTIFICATIONS */}
             <Certifications />
 
-            {/* 8. CONTACT */}
+            {/* 8. PERSONAL - Languages, Interests, Hobbies */}
+            <Personal />
+
+            {/* 9. CONTACT */}
             <Contact />
         </main>
     );

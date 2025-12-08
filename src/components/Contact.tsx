@@ -1,207 +1,321 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import SectionWrapper, { fadeInUp } from "@/components/ui/SectionWrapper";
+import React, { useRef, useEffect, useState } from "react";
+import { motion, useInView } from "framer-motion";
+import { gsap } from "gsap";
+import SectionWrapper from "@/components/ui/SectionWrapper";
 import { portfolioData } from "@/lib/data";
-import {
-    Mail,
-    Phone,
-    Linkedin,
-    MapPin,
-    Send,
-    Heart,
-    Globe,
-    Gamepad2,
-    Sparkles
-} from "lucide-react";
+import { Mail, Linkedin, Phone, MapPin, Send, Sparkles, Dna, Rocket, Zap, Heart } from "lucide-react";
 
-export default function Contact() {
-    const [formState, setFormState] = useState({
-        name: "",
-        email: "",
-        message: ""
-    });
-    const [isSubmitting, setIsSubmitting] = useState(false);
+// DNA Letter animation for CTA text
+function AnimatedText({ text }: { text: string }) {
+    const textRef = useRef<HTMLDivElement>(null);
+    const isInView = useInView(textRef, { once: true });
+    const [animationComplete, setAnimationComplete] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsSubmitting(true);
+    useEffect(() => {
+        if (isInView && textRef.current) {
+            const letters = textRef.current.querySelectorAll('.animated-letter');
 
-        // Create mailto link
-        const subject = encodeURIComponent(`Portfolio Contact from ${formState.name}`);
-        const body = encodeURIComponent(`Name: ${formState.name}\nEmail: ${formState.email}\n\nMessage:\n${formState.message}`);
-        window.location.href = `mailto:${portfolioData.contact.email}?subject=${subject}&body=${body}`;
-
-        setTimeout(() => setIsSubmitting(false), 1000);
-    };
+            gsap.fromTo(
+                letters,
+                {
+                    opacity: 0,
+                    y: 40,
+                    rotateX: -90,
+                    scale: 0.5
+                },
+                {
+                    opacity: 1,
+                    y: 0,
+                    rotateX: 0,
+                    scale: 1,
+                    duration: 0.5,
+                    stagger: 0.025,
+                    ease: "back.out(1.7)",
+                    onComplete: () => setAnimationComplete(true)
+                }
+            );
+        }
+    }, [isInView]);
 
     return (
-        <SectionWrapper id="contact" title="Get In Touch" subtitle="Let's discuss research collaborations or opportunities">
-            <div className="grid lg:grid-cols-2 gap-12">
-                {/* Contact Form */}
-                <motion.div
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ once: true }}
-                    variants={fadeInUp}
+        <div
+            ref={textRef}
+            className="flex flex-wrap justify-center gap-1 perspective-1000"
+        >
+            {text.split('').map((char, index) => (
+                <span
+                    key={index}
+                    className={`animated-letter inline-block text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold 
+                        ${char === ' ' ? 'w-3 md:w-4' : 'text-gradient'}
+                        ${animationComplete ? '' : 'opacity-0'}
+                    `}
+                    style={{
+                        transformStyle: 'preserve-3d'
+                    }}
                 >
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div>
-                            <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-2">
-                                Your Name
-                            </label>
-                            <input
-                                type="text"
-                                id="name"
-                                required
-                                value={formState.name}
-                                onChange={(e) => setFormState(prev => ({ ...prev, name: e.target.value }))}
-                                className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-all"
-                                placeholder="John Doe"
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-2">
-                                Your Email
-                            </label>
-                            <input
-                                type="email"
-                                id="email"
-                                required
-                                value={formState.email}
-                                onChange={(e) => setFormState(prev => ({ ...prev, email: e.target.value }))}
-                                className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-all"
-                                placeholder="john@example.com"
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="message" className="block text-sm font-medium text-gray-400 mb-2">
-                                Message
-                            </label>
-                            <textarea
-                                id="message"
-                                required
-                                rows={5}
-                                value={formState.message}
-                                onChange={(e) => setFormState(prev => ({ ...prev, message: e.target.value }))}
-                                className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-all resize-none"
-                                placeholder="Tell me about your project or research collaboration..."
-                            />
-                        </div>
-                        <motion.button
-                            type="submit"
-                            disabled={isSubmitting}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold hover:shadow-[0_0_30px_rgba(0,247,255,0.4)] transition-all duration-300 disabled:opacity-50"
+                    {char}
+                </span>
+            ))}
+        </div>
+    );
+}
+
+// Enhanced floating particles
+function ParticleField() {
+    return (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {[...Array(20)].map((_, i) => (
+                <motion.div
+                    key={i}
+                    className="absolute rounded-full"
+                    style={{
+                        left: `${Math.random() * 100}%`,
+                        top: `${Math.random() * 100}%`,
+                        width: `${2 + Math.random() * 4}px`,
+                        height: `${2 + Math.random() * 4}px`,
+                        backgroundColor: i % 2 === 0 ? '#00e5ff' : '#00ff9f',
+                    }}
+                    animate={{
+                        y: [0, -40, 0],
+                        x: [0, (Math.random() - 0.5) * 30, 0],
+                        opacity: [0.1, 0.6, 0.1],
+                        scale: [1, 1.5, 1],
+                    }}
+                    transition={{
+                        duration: 4 + Math.random() * 3,
+                        repeat: Infinity,
+                        delay: Math.random() * 3,
+                        ease: "easeInOut"
+                    }}
+                />
+            ))}
+        </div>
+    );
+}
+
+// Contact card with enhanced animation
+function ContactCard({
+    icon: Icon,
+    label,
+    value,
+    href,
+    variant = "teal",
+    delay = 0
+}: {
+    icon: React.ElementType;
+    label: string;
+    value: string;
+    href?: string;
+    variant?: "teal" | "green";
+    delay?: number;
+}) {
+    const cardRef = useRef<HTMLDivElement>(null);
+    const isInView = useInView(cardRef, { once: true });
+    const [isHovered, setIsHovered] = useState(false);
+
+    const colors = {
+        teal: {
+            bg: "bg-primary/10",
+            border: "border-primary/30 hover:border-primary/60",
+            icon: "text-primary",
+            glow: "0 0 40px rgba(0,229,255,0.3)"
+        },
+        green: {
+            bg: "bg-secondary/10",
+            border: "border-secondary/30 hover:border-secondary/60",
+            icon: "text-secondary",
+            glow: "0 0 40px rgba(0,255,159,0.3)"
+        }
+    };
+
+    const color = colors[variant];
+
+    const content = (
+        <motion.div
+            ref={cardRef}
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+            transition={{ delay, duration: 0.6 }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className="h-full"
+        >
+            <motion.div
+                className={`glass-card rounded-2xl p-6 border ${color.border} transition-all duration-500 cursor-pointer h-full`}
+                animate={{
+                    y: isHovered ? -8 : 0,
+                    scale: isHovered ? 1.02 : 1,
+                    boxShadow: isHovered ? color.glow : "none"
+                }}
+            >
+                <div className="flex items-center gap-4">
+                    <motion.div
+                        className={`w-14 h-14 rounded-xl ${color.bg} flex items-center justify-center`}
+                        animate={{
+                            rotate: isHovered ? 360 : 0,
+                            scale: isHovered ? 1.1 : 1
+                        }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        <Icon className={`w-7 h-7 ${color.icon}`} />
+                    </motion.div>
+                    <div>
+                        <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">{label}</p>
+                        <motion.p
+                            className="text-white font-medium group-hover:text-gradient transition-all"
+                            animate={{ x: isHovered ? 3 : 0 }}
+                        >
+                            {value}
+                        </motion.p>
+                    </div>
+                </div>
+            </motion.div>
+        </motion.div>
+    );
+
+    if (href) {
+        return (
+            <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" className="group">
+                {content}
+            </a>
+        );
+    }
+
+    return <div className="group">{content}</div>;
+}
+
+export default function Contact() {
+    return (
+        <SectionWrapper
+            id="contact"
+            title="Get in Touch"
+            subtitle="Let's collaborate on the future of biotechnology"
+        >
+            <div className="relative">
+                {/* Particle field */}
+                <ParticleField />
+
+                {/* Main CTA */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                    className="text-center mb-12"
+                >
+                    <AnimatedText text="Let's build the future" />
+
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.8, duration: 0.6 }}
+                        className="text-gray-400 text-lg mt-6 max-w-xl mx-auto"
+                    >
+                        Whether it&apos;s protein engineering, CRISPR applications, or AI in biotech —
+                        I&apos;m always excited to discuss new ideas and collaborations.
+                    </motion.p>
+                </motion.div>
+
+                {/* Contact cards grid */}
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+                    <ContactCard
+                        icon={Mail}
+                        label="Email"
+                        value={portfolioData.contact.email}
+                        href={`mailto:${portfolioData.contact.email}`}
+                        variant="teal"
+                        delay={0}
+                    />
+                    <ContactCard
+                        icon={Linkedin}
+                        label="LinkedIn"
+                        value="Connect with me"
+                        href={portfolioData.contact.linkedin}
+                        variant="green"
+                        delay={0.1}
+                    />
+                    <ContactCard
+                        icon={Phone}
+                        label="Phone"
+                        value={portfolioData.contact.phone}
+                        variant="teal"
+                        delay={0.2}
+                    />
+                    <ContactCard
+                        icon={MapPin}
+                        label="Location"
+                        value={portfolioData.contact.location}
+                        variant="green"
+                        delay={0.3}
+                    />
+                </div>
+
+                {/* CTA Button */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.4, duration: 0.6 }}
+                    className="text-center"
+                >
+                    <motion.a
+                        href={`mailto:${portfolioData.contact.email}`}
+                        className="inline-flex items-center gap-3 px-10 py-4 rounded-full bg-gradient-to-r from-primary via-teal-400 to-secondary text-navy-900 font-bold text-lg relative overflow-hidden group"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        {/* Shine effect */}
+                        <motion.div
+                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                            animate={{ x: ["-100%", "200%"] }}
+                            transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                        />
+
+                        <motion.div
+                            animate={{ x: [0, 5, 0] }}
+                            transition={{ duration: 1.5, repeat: Infinity }}
                         >
                             <Send className="w-5 h-5" />
-                            <span>{isSubmitting ? "Opening Email..." : "Send Message"}</span>
-                        </motion.button>
-                    </form>
+                        </motion.div>
+                        <span className="relative">Start a Conversation</span>
+                        <motion.div
+                            animate={{ rotate: [0, 15, -15, 0] }}
+                            transition={{ duration: 2, repeat: Infinity, repeatDelay: 2 }}
+                        >
+                            <Rocket className="w-5 h-5" />
+                        </motion.div>
+                    </motion.a>
                 </motion.div>
 
-                {/* Contact Info */}
+                {/* Footer decoration */}
                 <motion.div
-                    initial="hidden"
-                    whileInView="show"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
-                    variants={fadeInUp}
-                    className="space-y-6"
+                    transition={{ delay: 0.6, duration: 0.8 }}
+                    className="mt-20 pt-8 border-t border-white/5 text-center"
                 >
-                    {/* Contact cards */}
-                    <div className="space-y-4">
-                        <a
-                            href={`mailto:${portfolioData.contact.email}`}
-                            className="flex items-center gap-4 p-4 rounded-xl glass-card border border-white/10 hover:border-primary/40 transition-all group"
+                    <motion.div
+                        className="flex items-center justify-center gap-3 text-gray-600 text-sm"
+                        whileHover={{ scale: 1.02 }}
+                    >
+                        <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                         >
-                            <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <Mail className="w-5 h-5 text-primary" />
-                            </div>
-                            <div>
-                                <p className="text-sm text-gray-400">Email</p>
-                                <p className="text-white font-medium">{portfolioData.contact.email}</p>
-                            </div>
-                        </a>
-
-                        <a
-                            href={portfolioData.contact.linkedin}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-4 p-4 rounded-xl glass-card border border-white/10 hover:border-secondary/40 transition-all group"
-                        >
-                            <div className="w-12 h-12 rounded-lg bg-secondary/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <Linkedin className="w-5 h-5 text-secondary" />
-                            </div>
-                            <div>
-                                <p className="text-sm text-gray-400">LinkedIn</p>
-                                <p className="text-white font-medium">Connect with me</p>
-                            </div>
-                        </a>
-
-                        <div className="flex items-center gap-4 p-4 rounded-xl glass-card border border-white/10">
-                            <div className="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center">
-                                <Phone className="w-5 h-5 text-gray-300" />
-                            </div>
-                            <div>
-                                <p className="text-sm text-gray-400">Phone</p>
-                                <p className="text-white font-medium">{portfolioData.contact.phone}</p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center gap-4 p-4 rounded-xl glass-card border border-white/10">
-                            <div className="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center">
-                                <MapPin className="w-5 h-5 text-gray-300" />
-                            </div>
-                            <div>
-                                <p className="text-sm text-gray-400">Location</p>
-                                <p className="text-white font-medium">{portfolioData.contact.location}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Additional info */}
-                    <div className="glass-card rounded-xl p-5 border border-white/10 space-y-4">
-                        <div className="flex items-start gap-3">
-                            <Globe className="w-5 h-5 text-primary mt-0.5" />
-                            <div>
-                                <p className="text-sm text-gray-400 mb-1">Languages</p>
-                                <p className="text-gray-300 text-sm">{portfolioData.languages}</p>
-                            </div>
-                        </div>
-                        <div className="flex items-start gap-3">
-                            <Sparkles className="w-5 h-5 text-secondary mt-0.5" />
-                            <div>
-                                <p className="text-sm text-gray-400 mb-1">Research Interests</p>
-                                <p className="text-gray-300 text-sm">{portfolioData.interests}</p>
-                            </div>
-                        </div>
-                        <div className="flex items-start gap-3">
-                            <Gamepad2 className="w-5 h-5 text-gray-400 mt-0.5" />
-                            <div>
-                                <p className="text-sm text-gray-400 mb-1">Hobbies</p>
-                                <p className="text-gray-300 text-sm">{portfolioData.hobbies}</p>
-                            </div>
-                        </div>
-                    </div>
+                            <Dna className="w-5 h-5 text-primary/50" />
+                        </motion.div>
+                        <span>© {new Date().getFullYear()} Tharun Srinivasan Sudha</span>
+                        <span className="text-gray-700">•</span>
+                        <span className="flex items-center gap-1">
+                            Built with <Heart className="w-4 h-4 text-red-500/70 inline" /> and <Zap className="w-4 h-4 text-primary/70 inline" />
+                        </span>
+                    </motion.div>
                 </motion.div>
             </div>
-
-            {/* Footer */}
-            <motion.footer
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                className="mt-20 pt-8 border-t border-white/10 text-center"
-            >
-                <p className="text-gray-500 text-sm flex items-center justify-center gap-2">
-                    Made with <Heart className="w-4 h-4 text-secondary" /> by Tharun Srinivasan Sudha
-                </p>
-                <p className="text-gray-600 text-xs mt-2">
-                    © {new Date().getFullYear()} All rights reserved.
-                </p>
-            </motion.footer>
         </SectionWrapper>
     );
 }

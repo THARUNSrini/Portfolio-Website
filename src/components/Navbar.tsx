@@ -1,97 +1,147 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion, useScroll, useMotionValueEvent } from "framer-motion";
-import { cn } from "@/utils/cn";
-import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, Dna } from "lucide-react";
+
+const navLinks = [
+    { name: "About", href: "#about" },
+    { name: "Education", href: "#education" },
+    { name: "Experience", href: "#experience" },
+    { name: "Projects", href: "#projects" },
+    { name: "Publications", href: "#publications" },
+    { name: "Skills", href: "#skills" },
+    { name: "Personal", href: "#personal" },
+    { name: "Contact", href: "#contact" },
+];
 
 export default function Navbar() {
-    const { scrollY } = useScroll();
-    const [hidden, setHidden] = useState(false);
-    const [prevScroll, setPrevScroll] = useState(0);
-    const [isOpen, setIsOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [activeSection, setActiveSection] = useState("");
 
-    useMotionValueEvent(scrollY, "change", (latest) => {
-        const previous = prevScroll;
-        if (latest > previous && latest > 150) {
-            setHidden(true);
-        } else {
-            setHidden(false);
-        }
-        setPrevScroll(latest);
-    });
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 50);
 
-    const navLinks = [
-        { name: "About", href: "#about" },
-        { name: "Education", href: "#education" },
-        { name: "Experience", href: "#experience" },
-        { name: "Projects", href: "#projects" },
-        { name: "Publications", href: "#publications" },
-        { name: "Skills", href: "#skills" },
-        { name: "Contact", href: "#contact" },
-    ];
+            // Update active section based on scroll position
+            const sections = navLinks.map(link => link.href.slice(1));
+            const current = sections.find(section => {
+                const element = document.getElementById(section);
+                if (element) {
+                    const rect = element.getBoundingClientRect();
+                    return rect.top <= 150 && rect.bottom >= 150;
+                }
+                return false;
+            });
+            if (current) setActiveSection(current);
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     return (
-        <motion.nav
-            variants={{
-                visible: { y: 0 },
-                hidden: { y: "-100%" },
-            }}
-            animate={hidden ? "hidden" : "visible"}
-            transition={{ duration: 0.35, ease: "easeInOut" }}
-            className={cn(
-                "fixed top-0 inset-x-0 mx-auto z-50 w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-4",
-            )}
-        >
-            <div className="relative flex items-center justify-between p-4 rounded-2xl glass-card">
-                {/* Logo */}
-                <Link href="/" className="text-xl font-bold tracking-tighter text-white">
-                    <span className="text-neon-cyan">T</span>SS
-                </Link>
-
-                {/* Desktop Links */}
-                <div className="hidden md:flex items-center space-x-6">
-                    {navLinks.map((link) => (
-                        <Link
-                            key={link.name}
-                            href={link.href}
-                            className="text-sm font-medium text-gray-300 hover:text-neon-cyan transition-colors"
+        <>
+            <motion.nav
+                initial={{ y: -100 }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+                    ? "bg-background/80 backdrop-blur-xl border-b border-white/5"
+                    : "bg-transparent"
+                    }`}
+            >
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex items-center justify-between h-16 md:h-20">
+                        {/* Logo */}
+                        <a
+                            href="#hero"
+                            className="flex items-center gap-2 group"
                         >
-                            {link.name}
-                        </Link>
-                    ))}
-                </div>
+                            <motion.div
+                                whileHover={{ rotate: 180 }}
+                                transition={{ duration: 0.5 }}
+                                className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center"
+                            >
+                                <Dna className="w-6 h-6 text-navy-900" />
+                            </motion.div>
+                            <span className="hidden sm:block font-bold text-lg">
+                                <span className="text-gradient">TSS</span>
+                            </span>
+                        </a>
 
-                {/* Mobile Menu Button */}
-                <button
-                    onClick={() => setIsOpen(!isOpen)}
-                    className="md:hidden p-2 text-gray-300 hover:text-white"
-                >
-                    {isOpen ? <X size={24} /> : <Menu size={24} />}
-                </button>
-            </div>
+                        {/* Desktop Navigation */}
+                        <div className="hidden md:flex items-center gap-1">
+                            {navLinks.map((link) => (
+                                <a
+                                    key={link.name}
+                                    href={link.href}
+                                    className={`relative px-4 py-2 text-sm font-medium transition-colors ${activeSection === link.href.slice(1)
+                                        ? "text-primary"
+                                        : "text-gray-400 hover:text-white"
+                                        }`}
+                                >
+                                    {link.name}
+                                    {activeSection === link.href.slice(1) && (
+                                        <motion.div
+                                            layoutId="activeSection"
+                                            className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary shadow-[0_0_10px_rgba(0,229,255,0.8)]"
+                                        />
+                                    )}
+                                </a>
+                            ))}
+                        </div>
+
+                        {/* Mobile Menu Button */}
+                        <button
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            className="md:hidden p-2 rounded-lg hover:bg-white/5 transition-colors"
+                            aria-label="Toggle menu"
+                        >
+                            {isMobileMenuOpen ? (
+                                <X className="w-6 h-6 text-primary" />
+                            ) : (
+                                <Menu className="w-6 h-6 text-white" />
+                            )}
+                        </button>
+                    </div>
+                </div>
+            </motion.nav>
 
             {/* Mobile Menu */}
-            {isOpen && (
-                <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    className="absolute top-20 left-4 right-4 p-4 rounded-2xl glass-card md:hidden flex flex-col space-y-4"
-                >
-                    {navLinks.map((link) => (
-                        <Link
-                            key={link.name}
-                            href={link.href}
-                            onClick={() => setIsOpen(false)}
-                            className="text-base font-medium text-gray-300 hover:text-neon-cyan block"
-                        >
-                            {link.name}
-                        </Link>
-                    ))}
-                </motion.div>
-            )}
-        </motion.nav>
+            <AnimatePresence>
+                {isMobileMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.2 }}
+                        className="fixed inset-x-0 top-16 z-40 md:hidden"
+                    >
+                        <div className="bg-background/95 backdrop-blur-xl border-b border-white/5 shadow-2xl">
+                            <div className="px-4 py-4 space-y-1">
+                                {navLinks.map((link, index) => (
+                                    <motion.a
+                                        key={link.name}
+                                        href={link.href}
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: index * 0.05 }}
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                        className={`block px-4 py-3 rounded-xl text-base font-medium transition-all ${activeSection === link.href.slice(1)
+                                            ? "bg-primary/10 text-primary"
+                                            : "text-gray-400 hover:bg-white/5 hover:text-white"
+                                            }`}
+                                    >
+                                        {link.name}
+                                    </motion.a>
+                                ))}
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </>
     );
 }
