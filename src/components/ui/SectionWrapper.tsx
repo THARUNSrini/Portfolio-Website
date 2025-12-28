@@ -29,16 +29,42 @@ export default function SectionWrapper({
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                     viewport={{ once: true, margin: "-100px" }}
-                    className="text-center mb-16"
+                    className="mb-20"
                 >
-                    <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                        <span className="text-gradient">{title}</span>
+                    {/* Section label */}
+                    <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: 0.1 }}
+                        viewport={{ once: true }}
+                        className="flex items-center gap-4 mb-6"
+                    >
+                        <div className="w-12 h-px bg-primary" />
+                        <span className="font-mono text-xs uppercase tracking-[0.2em] text-primary">
+                            {id.replace(/-/g, ' ')}
+                        </span>
+                    </motion.div>
+
+                    {/* Title with serif font */}
+                    <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-paper-cream mb-6">
+                        {title}
                     </h2>
+
+                    {/* Subtitle */}
                     {subtitle && (
-                        <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+                        <p className="text-paper-muted text-lg max-w-2xl font-body">
                             {subtitle}
                         </p>
                     )}
+
+                    {/* Decorative divider */}
+                    <motion.div
+                        initial={{ scaleX: 0 }}
+                        whileInView={{ scaleX: 1 }}
+                        transition={{ duration: 0.8, delay: 0.3 }}
+                        viewport={{ once: true }}
+                        className="mt-8 h-px bg-gradient-to-r from-primary/50 via-secondary/30 to-transparent origin-left max-w-md"
+                    />
                 </motion.div>
             )}
             {children}
@@ -85,6 +111,30 @@ export const scaleIn = {
         scale: 1,
         transition: {
             duration: 0.5,
+        }
+    },
+};
+
+export const slideInLeft = {
+    hidden: { opacity: 0, x: -40 },
+    show: {
+        opacity: 1,
+        x: 0,
+        transition: {
+            duration: 0.6,
+            ease: "easeOut"
+        }
+    },
+};
+
+export const slideInRight = {
+    hidden: { opacity: 0, x: 40 },
+    show: {
+        opacity: 1,
+        x: 0,
+        transition: {
+            duration: 0.6,
+            ease: "easeOut"
         }
     },
 };

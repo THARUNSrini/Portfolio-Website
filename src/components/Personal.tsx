@@ -4,108 +4,83 @@ import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import { portfolioData } from "@/lib/data";
-import { Globe, Microscope, Heart, Sparkles } from "lucide-react";
+import { Globe, Microscope, Heart } from "lucide-react";
 
-// Animated info card with 3D hover effect
+// Info card with brutalist styling
 function InfoCard({
     icon: Icon,
     title,
     content,
     delay = 0,
-    variant = "teal"
+    variant = "primary"
 }: {
     icon: React.ElementType;
     title: string;
     content: string;
     delay?: number;
-    variant?: "teal" | "green" | "gradient";
+    variant?: "primary" | "secondary" | "tertiary";
 }) {
     const cardRef = useRef<HTMLDivElement>(null);
     const isInView = useInView(cardRef, { once: true, margin: "-50px" });
 
     const colors = {
-        teal: {
-            bg: "from-primary/10 to-primary/5",
-            border: "border-primary/30 hover:border-primary/60",
-            icon: "bg-primary/20 text-primary",
-            glow: "hover:shadow-[0_0_40px_rgba(0,229,255,0.2)]"
+        primary: {
+            border: "border-primary",
+            shadow: "4px 4px 0px 0px #FFB800",
+            hoverShadow: "6px 6px 0px 0px #FFB800",
+            icon: "text-primary"
         },
-        green: {
-            bg: "from-secondary/10 to-secondary/5",
-            border: "border-secondary/30 hover:border-secondary/60",
-            icon: "bg-secondary/20 text-secondary",
-            glow: "hover:shadow-[0_0_40px_rgba(0,255,159,0.2)]"
+        secondary: {
+            border: "border-secondary",
+            shadow: "4px 4px 0px 0px #22C55E",
+            hoverShadow: "6px 6px 0px 0px #22C55E",
+            icon: "text-secondary"
         },
-        gradient: {
-            bg: "from-primary/10 via-secondary/5 to-primary/10",
-            border: "border-white/20 hover:border-primary/50",
-            icon: "bg-gradient-to-br from-primary/20 to-secondary/20 text-white",
-            glow: "hover:shadow-[0_0_40px_rgba(0,229,255,0.15)]"
+        tertiary: {
+            border: "border-tertiary",
+            shadow: "4px 4px 0px 0px #F472B6",
+            hoverShadow: "6px 6px 0px 0px #F472B6",
+            icon: "text-tertiary"
         }
     };
 
-    const color = colors[variant];
+    const c = colors[variant];
 
     return (
         <motion.div
             ref={cardRef}
-            initial={{ opacity: 0, y: 40, rotateX: -15 }}
-            animate={isInView ? { opacity: 1, y: 0, rotateX: 0 } : {}}
-            transition={{ delay, duration: 0.7, ease: "easeOut" }}
-            whileHover={{
-                y: -8,
-                rotateY: 5,
-                scale: 1.02,
-                transition: { duration: 0.3 }
-            }}
-            style={{ transformStyle: "preserve-3d" }}
-            className="group perspective-1000"
+            initial={{ opacity: 0, y: 40 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay, duration: 0.6 }}
+            className="group h-full"
         >
-            <div className={`
-                glass-card rounded-2xl p-6 h-full
-                bg-gradient-to-br ${color.bg}
-                border ${color.border}
-                ${color.glow}
-                transition-all duration-500
-            `}>
-                {/* Header with icon */}
+            <motion.div
+                className={`relative bg-surface border-2 ${c.border} p-6 h-full transition-all duration-200`}
+                style={{ boxShadow: c.shadow }}
+                whileHover={{ x: -2, y: -2 }}
+                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = c.hoverShadow)}
+                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = c.shadow)}
+            >
+                {/* Header */}
                 <div className="flex items-center gap-4 mb-4">
-                    <motion.div
-                        whileHover={{ rotate: 360, scale: 1.1 }}
-                        transition={{ duration: 0.5 }}
-                        className={`w-12 h-12 rounded-xl ${color.icon} flex items-center justify-center`}
-                    >
-                        <Icon className="w-6 h-6" />
-                    </motion.div>
-                    <h3 className="text-lg font-bold text-white group-hover:text-gradient transition-all">
+                    <div className={`w-10 h-10 border ${c.border} bg-surface flex items-center justify-center`}>
+                        <Icon className={`w-5 h-5 ${c.icon}`} />
+                    </div>
+                    <h3 className="font-display text-lg font-semibold text-paper-cream">
                         {title}
                     </h3>
                 </div>
 
-                {/* Content with animated reveal */}
-                <motion.p
-                    className="text-gray-300 text-sm leading-relaxed"
-                    initial={{ opacity: 0 }}
-                    animate={isInView ? { opacity: 1 } : {}}
-                    transition={{ delay: delay + 0.2, duration: 0.5 }}
-                >
+                {/* Content */}
+                <p className="font-body text-sm text-paper-muted leading-relaxed">
                     {content}
-                </motion.p>
+                </p>
 
-                {/* Decorative corner accent */}
-                <div className="absolute top-0 right-0 w-20 h-20 overflow-hidden rounded-tr-2xl pointer-events-none">
-                    <div className={`absolute top-0 right-0 w-10 h-10 bg-gradient-to-bl ${variant === 'teal' ? 'from-primary/20' : variant === 'green' ? 'from-secondary/20' : 'from-primary/10'} to-transparent`} />
+                {/* Corner accent */}
+                <div className="absolute bottom-0 right-0 w-8 h-8">
+                    <div className={`absolute bottom-2 right-2 w-4 h-4 border-b border-r ${c.border} opacity-50`} />
                 </div>
-
-                {/* Animated sparkle on hover */}
-                <motion.div
-                    initial={{ opacity: 0, scale: 0 }}
-                    whileHover={{ opacity: 1, scale: 1 }}
-                    className="absolute top-4 right-4"
-                >
-                    <Sparkles className="w-4 h-4 text-primary/50" />
-                </motion.div>
-            </div>
+            </motion.div>
         </motion.div>
     );
 }
@@ -123,25 +98,25 @@ export default function Personal() {
                     title="Languages"
                     content={portfolioData.languages}
                     delay={0}
-                    variant="teal"
+                    variant="primary"
                 />
                 <InfoCard
                     icon={Microscope}
                     title="Research Interests"
                     content={portfolioData.interests}
                     delay={0.1}
-                    variant="green"
+                    variant="secondary"
                 />
                 <InfoCard
                     icon={Heart}
                     title="Beyond the Lab"
                     content={portfolioData.hobbies}
                     delay={0.2}
-                    variant="gradient"
+                    variant="tertiary"
                 />
             </div>
 
-            {/* Decorative animated line */}
+            {/* Decorative line */}
             <motion.div
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}

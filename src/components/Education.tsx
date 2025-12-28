@@ -1,71 +1,54 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
-import { gsap } from "gsap";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import { portfolioData } from "@/lib/data";
-import { GraduationCap, MapPin, Sparkles, BookOpen, Award } from "lucide-react";
+import { GraduationCap, MapPin, Award, ArrowRight } from "lucide-react";
 
-// Animated DNA-style timeline connector
-function DNAConnector() {
+// Timeline connector with measurement marks
+function TimelineConnector() {
     return (
-        <div className="relative w-0.5 h-full min-h-[120px]">
-            {/* Main line */}
-            <div className="absolute inset-0 bg-gradient-to-b from-primary via-secondary to-primary opacity-50" />
+        <div className="relative w-0.5 h-full min-h-[100px] bg-white/10">
+            {/* Measurement marks */}
+            {[...Array(5)].map((_, i) => (
+                <div
+                    key={i}
+                    className="absolute w-2 h-px bg-primary/30"
+                    style={{ top: `${(i + 1) * 20}%`, left: '-3px' }}
+                />
+            ))}
 
-            {/* Animated helix dots */}
+            {/* Animated pulse */}
             <motion.div
-                animate={{ y: [0, 100, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -left-1 w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_10px_rgba(0,229,255,0.8)]"
-            />
-            <motion.div
-                animate={{ y: [100, 0, 100] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -right-1 w-2.5 h-2.5 rounded-full bg-secondary shadow-[0_0_10px_rgba(0,255,159,0.8)]"
+                animate={{
+                    top: ["0%", "100%", "0%"],
+                    opacity: [0, 1, 0]
+                }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute left-1/2 -translate-x-1/2 w-1.5 h-4 bg-primary/50"
             />
         </div>
     );
 }
 
-// Timeline dot with advanced animation
-function TimelineDot({ isActive = false }: { isActive?: boolean }) {
+// Timeline node
+function TimelineNode({ isActive = false }: { isActive?: boolean }) {
     return (
-        <motion.div
-            className="relative"
-            whileHover={{ scale: 1.2 }}
-        >
-            <motion.div
-                className={`w-5 h-5 rounded-full ${isActive ? 'bg-gradient-to-br from-primary to-secondary' : 'bg-secondary/70'} shadow-lg`}
-                animate={isActive ? {
-                    boxShadow: [
-                        "0 0 0 0 rgba(0, 229, 255, 0.4)",
-                        "0 0 0 10px rgba(0, 229, 255, 0)",
-                        "0 0 0 0 rgba(0, 229, 255, 0)"
-                    ]
-                } : {}}
-                transition={{ duration: 2, repeat: Infinity }}
-            />
+        <div className="relative">
+            <div className={`w-4 h-4 border-2 ${isActive ? 'border-primary bg-primary/20' : 'border-secondary bg-secondary/20'}`} />
             {isActive && (
-                <>
-                    <motion.div
-                        className="absolute inset-0 w-5 h-5 rounded-full bg-primary/30"
-                        animate={{ scale: [1, 1.8, 1], opacity: [0.5, 0, 0.5] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                    />
-                    <motion.div
-                        className="absolute -inset-1 rounded-full border border-primary/50"
-                        animate={{ scale: [1, 1.3, 1], opacity: [0.8, 0, 0.8] }}
-                        transition={{ duration: 1.5, repeat: Infinity, delay: 0.3 }}
-                    />
-                </>
+                <motion.div
+                    className="absolute inset-0 border-2 border-primary"
+                    animate={{ scale: [1, 1.5, 1], opacity: [1, 0, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                />
             )}
-        </motion.div>
+        </div>
     );
 }
 
-// Education card with 3D flip and advanced animations
+// Education card
 function EducationCard({
     education,
     index,
@@ -79,115 +62,75 @@ function EducationCard({
     const isInView = useInView(cardRef, { once: true, margin: "-50px" });
     const isActive = education.year.includes("Present");
 
+    const borderColor = isActive ? "border-primary" : "border-secondary";
+    const shadowColor = isActive ? "4px 4px 0px 0px #FFB800" : "4px 4px 0px 0px #22C55E";
+    const hoverShadow = isActive ? "6px 6px 0px 0px #FFB800" : "6px 6px 0px 0px #22C55E";
+
     return (
         <motion.div
             ref={cardRef}
-            initial={{ opacity: 0, x: index % 2 === 0 ? -80 : 80, rotateY: index % 2 === 0 ? -20 : 20 }}
-            animate={isInView ? { opacity: 1, x: 0, rotateY: 0 } : {}}
-            transition={{ delay: index * 0.25, duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="relative flex items-start gap-6"
-            style={{ transformStyle: "preserve-3d" }}
+            initial={{ opacity: 0, x: -50 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ delay: index * 0.2, duration: 0.6 }}
+            className="relative flex items-start gap-6 mb-8"
         >
             {/* Timeline */}
-            <div className="flex flex-col items-center">
-                <TimelineDot isActive={isActive} />
-                {!isLast && <DNAConnector />}
+            <div className="flex flex-col items-center pt-1">
+                <TimelineNode isActive={isActive} />
+                {!isLast && <TimelineConnector />}
             </div>
 
-            {/* Card content with 3D hover */}
+            {/* Card */}
             <motion.div
-                className={`flex-1 glass-card rounded-2xl p-6 border ${isActive ? 'border-primary/50' : 'border-white/10'} transition-all duration-500 group mb-6 overflow-hidden`}
-                whileHover={{
-                    scale: 1.02,
-                    rotateY: 3,
-                    boxShadow: isActive
-                        ? "0 0 40px rgba(0, 229, 255, 0.2)"
-                        : "0 0 30px rgba(0, 255, 159, 0.1)"
-                }}
-                style={{ transformStyle: "preserve-3d" }}
+                className={`flex-1 bg-surface border-2 ${borderColor} p-6 transition-all duration-200 group`}
+                style={{ boxShadow: shadowColor }}
+                whileHover={{ x: -2, y: -2 }}
+                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = hoverShadow)}
+                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = shadowColor)}
             >
-                {/* Animated background gradient */}
-                <motion.div
-                    className={`absolute inset-0 bg-gradient-to-br ${isActive ? 'from-primary/10 via-transparent to-secondary/5' : 'from-secondary/5 via-transparent to-primary/5'} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
-                />
-
-                {/* Year badge with animation */}
-                <motion.div
-                    className={`relative inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold mb-4 ${isActive ? 'bg-gradient-to-r from-primary/30 to-secondary/30 text-white' : 'bg-secondary/20 text-secondary'}`}
-                    whileHover={{ scale: 1.05 }}
-                >
-                    {isActive && (
-                        <motion.div
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                        >
-                            <Sparkles className="w-3 h-3" />
-                        </motion.div>
-                    )}
-                    {education.year}
-                    {isActive && (
-                        <motion.span
-                            animate={{ opacity: [1, 0.5, 1] }}
-                            transition={{ duration: 1.5, repeat: Infinity }}
-                            className="w-2 h-2 bg-primary rounded-full"
-                        />
-                    )}
-                </motion.div>
-
-                {/* Degree with hover effect */}
-                <motion.h3
-                    className="relative text-xl font-bold text-white mb-3 group-hover:text-gradient transition-all"
-                    initial={{ x: 0 }}
-                    whileHover={{ x: 5 }}
-                >
-                    <BookOpen className="inline w-5 h-5 mr-2 text-primary/70" />
-                    {education.degree}
-                </motion.h3>
-
-                {/* School with location */}
-                <motion.div
-                    className="flex items-center gap-2 text-gray-400 mb-4"
-                    initial={{ opacity: 0.8 }}
-                    whileHover={{ opacity: 1, x: 3 }}
-                >
-                    <MapPin className="w-4 h-4 text-primary/70" />
-                    <span className="text-sm">{education.school}</span>
-                </motion.div>
-
-                {/* Highlight with animated reveal */}
-                {education.highlight && (
-                    <motion.div
-                        className="relative mt-4 p-4 rounded-xl bg-gradient-to-r from-primary/10 via-secondary/5 to-primary/10 border border-primary/20 overflow-hidden"
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={isInView ? { opacity: 1, height: "auto" } : {}}
-                        transition={{ delay: index * 0.25 + 0.4, duration: 0.5 }}
-                    >
-                        {/* Animated shine effect */}
-                        <motion.div
-                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"
-                            animate={{ x: ["-100%", "200%"] }}
-                            transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
-                        />
-
-                        <div className="relative flex items-start gap-3">
+                {/* Year badge */}
+                <div className="flex items-center justify-between mb-4">
+                    <div className={`inline-flex items-center gap-2 px-3 py-1 border ${isActive ? 'border-primary text-primary' : 'border-secondary text-secondary'}`}>
+                        <span className="font-mono text-xs uppercase tracking-wider">
+                            {education.year}
+                        </span>
+                        {isActive && (
                             <motion.div
-                                animate={{ rotate: [0, 10, -10, 0] }}
-                                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-                            >
-                                <Award className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                            </motion.div>
-                            <p className="text-sm text-gray-300">{education.highlight}</p>
+                                animate={{ opacity: [1, 0.3, 1] }}
+                                transition={{ duration: 1.5, repeat: Infinity }}
+                                className="w-1.5 h-1.5 bg-primary"
+                            />
+                        )}
+                    </div>
+                    <GraduationCap className={`w-5 h-5 ${isActive ? 'text-primary' : 'text-secondary'}`} />
+                </div>
+
+                {/* Degree */}
+                <h3 className="font-display text-xl font-semibold text-paper-cream mb-3">
+                    {education.degree}
+                </h3>
+
+                {/* School */}
+                <div className="flex items-center gap-2 text-paper-muted mb-4">
+                    <MapPin className="w-4 h-4 text-primary/50" />
+                    <span className="font-body text-sm">{education.school}</span>
+                </div>
+
+                {/* Highlight */}
+                {education.highlight && (
+                    <div className="mt-4 pt-4 border-t border-white/10">
+                        <div className="flex items-start gap-3">
+                            <Award className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                            <p className="font-body text-sm text-paper-muted leading-relaxed">
+                                {education.highlight}
+                            </p>
                         </div>
-                    </motion.div>
+                    </div>
                 )}
 
-                {/* Decorative corner elements */}
-                <div className="absolute top-0 right-0 w-16 h-16 overflow-hidden">
-                    <motion.div
-                        className="absolute top-2 right-2 w-8 h-8 border-t-2 border-r-2 border-primary/20 rounded-tr-lg"
-                        animate={{ opacity: [0.3, 0.6, 0.3] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                    />
+                {/* Corner accent */}
+                <div className="absolute top-0 right-0 w-8 h-8">
+                    <div className={`absolute top-2 right-2 w-4 h-4 border-t border-r ${borderColor} opacity-50`} />
                 </div>
             </motion.div>
         </motion.div>
@@ -210,26 +153,6 @@ export default function Education() {
             subtitle="Academic journey through biotechnology and computational biology"
         >
             <motion.div ref={containerRef} style={{ opacity }} className="relative">
-                {/* Background decoration */}
-                <div className="absolute inset-0 -z-10 pointer-events-none">
-                    <motion.div
-                        animate={{
-                            y: [0, -20, 0],
-                            opacity: [0.1, 0.2, 0.1]
-                        }}
-                        transition={{ duration: 5, repeat: Infinity }}
-                        className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/10 rounded-full blur-[100px]"
-                    />
-                    <motion.div
-                        animate={{
-                            y: [0, 20, 0],
-                            opacity: [0.1, 0.2, 0.1]
-                        }}
-                        transition={{ duration: 5, repeat: Infinity, delay: 2.5 }}
-                        className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-secondary/10 rounded-full blur-[100px]"
-                    />
-                </div>
-
                 {/* Timeline */}
                 <div className="max-w-2xl mx-auto">
                     {portfolioData.education.map((edu, index) => (
@@ -242,21 +165,23 @@ export default function Education() {
                     ))}
                 </div>
 
-                {/* Journey line */}
+                {/* Journey indicator */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: 0.8, duration: 0.6 }}
-                    className="mt-10 text-center"
+                    transition={{ delay: 0.6, duration: 0.6 }}
+                    className="mt-12 flex items-center justify-center gap-4"
                 >
-                    <motion.p
-                        className="text-gray-500 text-sm italic"
-                        animate={{ opacity: [0.5, 1, 0.5] }}
-                        transition={{ duration: 3, repeat: Infinity }}
-                    >
-                        ✨ From Chennai to Halle · Building the future of protein engineering ✨
-                    </motion.p>
+                    <div className="w-12 h-px bg-primary/30" />
+                    <span className="font-mono text-xs text-paper-muted uppercase tracking-wider">
+                        Chennai → Halle
+                    </span>
+                    <ArrowRight className="w-4 h-4 text-primary" />
+                    <span className="font-mono text-xs text-primary uppercase tracking-wider">
+                        Future
+                    </span>
+                    <div className="w-12 h-px bg-primary/30" />
                 </motion.div>
             </motion.div>
         </SectionWrapper>

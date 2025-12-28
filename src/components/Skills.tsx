@@ -4,10 +4,10 @@ import React, { useRef, useState } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import { portfolioData } from "@/lib/data";
-import { FlaskConical, Cpu, Brain, Quote, Sparkles, Dna } from "lucide-react";
+import { FlaskConical, Cpu, Brain, Atom } from "lucide-react";
 
-// Skill pill with animated fill effect
-function SkillPill({
+// Skill tag with mono styling
+function SkillTag({
     skill,
     variant,
     index
@@ -16,31 +16,24 @@ function SkillPill({
     variant: "wet_lab" | "computational" | "ai";
     index: number;
 }) {
-    const pillRef = useRef<HTMLDivElement>(null);
-    const isInView = useInView(pillRef, { once: true, margin: "-20px" });
-    const [isHovered, setIsHovered] = useState(false);
+    const tagRef = useRef<HTMLDivElement>(null);
+    const isInView = useInView(tagRef, { once: true, margin: "-20px" });
 
     const variantStyles = {
         wet_lab: {
-            bg: "bg-gradient-to-r from-primary/5 to-primary/10",
-            border: "border-primary/20 hover:border-primary/60",
+            border: "border-primary/40 hover:border-primary",
             text: "text-primary",
-            glow: "hover:shadow-[0_0_25px_rgba(0,229,255,0.2)]",
-            fill: "bg-primary/30"
+            bg: "hover:bg-primary/5"
         },
         computational: {
-            bg: "bg-gradient-to-r from-secondary/5 to-secondary/10",
-            border: "border-secondary/20 hover:border-secondary/60",
+            border: "border-secondary/40 hover:border-secondary",
             text: "text-secondary",
-            glow: "hover:shadow-[0_0_25px_rgba(0,255,159,0.2)]",
-            fill: "bg-secondary/30"
+            bg: "hover:bg-secondary/5"
         },
         ai: {
-            bg: "bg-gradient-to-r from-teal-400/5 to-secondary/10",
-            border: "border-teal-400/20 hover:border-teal-400/60",
-            text: "text-teal-300",
-            glow: "hover:shadow-[0_0_25px_rgba(0,229,255,0.2)]",
-            fill: "bg-teal-400/30"
+            border: "border-tertiary/40 hover:border-tertiary",
+            text: "text-tertiary",
+            bg: "hover:bg-tertiary/5"
         }
     };
 
@@ -48,60 +41,28 @@ function SkillPill({
 
     return (
         <motion.div
-            ref={pillRef}
-            initial={{ opacity: 0, x: -30, scale: 0.9 }}
-            animate={isInView ? { opacity: 1, x: 0, scale: 1 } : {}}
+            ref={tagRef}
+            initial={{ opacity: 0, x: -20 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{
-                delay: index * 0.04,
-                duration: 0.5,
-                ease: [0.25, 0.46, 0.45, 0.94]
+                delay: index * 0.03,
+                duration: 0.4,
+                ease: "easeOut"
             }}
-            whileHover={{
-                scale: 1.03,
-                y: -3,
-                transition: { duration: 0.2 }
-            }}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
             className={`
-                relative group cursor-default overflow-hidden
-                px-4 py-2.5 rounded-xl
-                ${style.bg} ${style.border} ${style.glow}
-                border backdrop-blur-sm
-                transition-all duration-300
+                px-4 py-2.5 border ${style.border} ${style.bg}
+                bg-surface transition-all duration-200 cursor-default
+                hover:translate-x-1
             `}
         >
-            {/* Animated fill on scroll */}
-            <motion.div
-                initial={{ scaleX: 0 }}
-                animate={isInView ? { scaleX: 1 } : {}}
-                transition={{ delay: index * 0.04 + 0.2, duration: 0.6 }}
-                className={`absolute inset-y-0 left-0 ${style.fill} origin-left`}
-                style={{ width: '100%', opacity: 0.3 }}
-            />
-
-            {/* Shine effect on hover */}
-            <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
-                animate={{ x: isHovered ? ["100%", "-100%"] : "-100%" }}
-                transition={{ duration: 0.6 }}
-            />
-
-            {/* Left accent */}
-            <motion.div
-                className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 rounded-full ${style.fill.replace('/30', '')}`}
-                animate={{ height: isHovered ? "60%" : "0%" }}
-                transition={{ duration: 0.3 }}
-            />
-
-            <p className={`relative text-sm font-medium ${style.text} group-hover:text-white transition-colors z-10`}>
+            <span className={`font-mono text-sm ${style.text}`}>
                 {skill}
-            </p>
+            </span>
         </motion.div>
     );
 }
 
-// Category section with animated header
+// Category section with header
 function SkillCategory({
     icon: Icon,
     title,
@@ -117,165 +78,111 @@ function SkillCategory({
 }) {
     const categoryRef = useRef<HTMLDivElement>(null);
     const isInView = useInView(categoryRef, { once: true });
-    const [isHovered, setIsHovered] = useState(false);
 
     const colors = {
         wet_lab: {
-            bg: "bg-primary/20",
-            text: "text-primary",
-            glow: "shadow-[0_0_40px_rgba(0,229,255,0.3)]",
-            border: "border-primary/30 hover:border-primary/50",
-            gradient: "from-primary/10 to-transparent"
+            border: "border-primary",
+            iconBg: "bg-primary/10",
+            iconColor: "text-primary",
+            shadow: "4px 4px 0px 0px #FFB800"
         },
         computational: {
-            bg: "bg-secondary/20",
-            text: "text-secondary",
-            glow: "shadow-[0_0_40px_rgba(0,255,159,0.3)]",
-            border: "border-secondary/30 hover:border-secondary/50",
-            gradient: "from-secondary/10 to-transparent"
+            border: "border-secondary",
+            iconBg: "bg-secondary/10",
+            iconColor: "text-secondary",
+            shadow: "4px 4px 0px 0px #22C55E"
         },
         ai: {
-            bg: "bg-teal-400/20",
-            text: "text-teal-300",
-            glow: "shadow-[0_0_40px_rgba(0,229,255,0.3)]",
-            border: "border-teal-400/30 hover:border-teal-400/50",
-            gradient: "from-teal-400/10 to-transparent"
+            border: "border-tertiary",
+            iconBg: "bg-tertiary/10",
+            iconColor: "text-tertiary",
+            shadow: "4px 4px 0px 0px #F472B6"
         }
     };
 
-    const color = colors[variant];
+    const c = colors[variant];
 
     return (
         <motion.div
             ref={categoryRef}
-            initial={{ opacity: 0, y: 50, rotateX: -10 }}
-            animate={isInView ? { opacity: 1, y: 0, rotateX: 0 } : {}}
-            transition={{ delay, duration: 0.7, ease: "easeOut" }}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            className={`glass-card rounded-2xl p-6 border ${color.border} transition-all duration-500 relative overflow-hidden`}
-            style={{ transformStyle: "preserve-3d" }}
+            initial={{ opacity: 0, y: 40 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay, duration: 0.6 }}
+            className={`bg-surface border-2 ${c.border} p-6`}
+            style={{ boxShadow: c.shadow }}
         >
-            {/* Animated background gradient */}
-            <motion.div
-                className={`absolute inset-0 bg-gradient-to-br ${color.gradient} opacity-0`}
-                animate={{ opacity: isHovered ? 1 : 0 }}
-                transition={{ duration: 0.3 }}
-            />
-
             {/* Header */}
-            <div className="relative flex items-center gap-4 mb-6">
-                <motion.div
-                    whileHover={{ scale: 1.1, rotate: 360 }}
-                    transition={{ duration: 0.5 }}
-                    animate={{
-                        boxShadow: isHovered ? color.glow.replace("shadow-", "") : "none"
-                    }}
-                    className={`w-14 h-14 rounded-2xl flex items-center justify-center ${color.bg} transition-all duration-500`}
-                >
-                    <Icon className={`w-7 h-7 ${color.text}`} />
-                </motion.div>
+            <div className="flex items-center gap-4 mb-6 pb-4 border-b border-white/10">
+                <div className={`w-12 h-12 ${c.iconBg} border border-white/10 flex items-center justify-center`}>
+                    <Icon className={`w-6 h-6 ${c.iconColor}`} />
+                </div>
                 <div>
-                    <h3 className="text-lg font-bold text-white">{title}</h3>
-                    <motion.span
-                        className="text-xs text-gray-500"
-                        animate={{ opacity: isHovered ? 1 : 0.7 }}
-                    >
+                    <h3 className="font-display text-xl font-semibold text-paper-cream">
+                        {title}
+                    </h3>
+                    <span className="font-mono text-xs text-paper-muted">
                         {skills.length} skills
-                    </motion.span>
+                    </span>
                 </div>
             </div>
 
-            {/* Skills grid */}
-            <div className="relative space-y-2">
+            {/* Skills list */}
+            <div className="space-y-2">
                 {skills.map((skill, index) => (
-                    <SkillPill key={skill} skill={skill} variant={variant} index={index} />
+                    <SkillTag key={skill} skill={skill} variant={variant} index={index} />
                 ))}
             </div>
-
-            {/* Corner decoration */}
-            <motion.div
-                className="absolute top-0 right-0 w-20 h-20"
-                animate={{ opacity: isHovered ? 0.5 : 0.2 }}
-            >
-                <div className={`absolute top-3 right-3 w-10 h-10 border-t-2 border-r-2 ${color.border} rounded-tr-lg`} />
-            </motion.div>
         </motion.div>
     );
 }
 
-// Motivating Life Quote component
-function MotivatingQuote() {
+// Quote card
+function CharpentierQuote() {
     const quoteRef = useRef<HTMLDivElement>(null);
     const isInView = useInView(quoteRef, { once: true });
 
     return (
         <motion.div
             ref={quoteRef}
-            initial={{ opacity: 0, y: 40, scale: 0.95 }}
-            animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-            transition={{ duration: 1, delay: 0.3 }}
+            initial={{ opacity: 0, y: 40 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.3 }}
             className="relative mt-16"
         >
-            {/* Glowing background */}
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10 rounded-3xl blur-xl" />
+            <div className="bg-surface border-2 border-primary p-8 md:p-12"
+                style={{ boxShadow: '6px 6px 0px 0px #FFB800' }}
+            >
+                {/* Corner decorations */}
+                <div className="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-secondary" />
+                <div className="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-secondary" />
 
-            <div className="relative glass-card rounded-3xl p-8 md:p-12 border border-white/10 overflow-hidden">
-                {/* Animated rocket decoration */}
+                {/* Floating atom */}
                 <motion.div
-                    animate={{ rotate: 360, y: [0, -10, 0] }}
-                    transition={{ rotate: { duration: 30, repeat: Infinity, ease: "linear" }, y: { duration: 3, repeat: Infinity } }}
-                    className="absolute -top-10 -right-10 opacity-10"
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                    className="absolute -top-8 -right-8 opacity-10"
                 >
-                    <Dna className="w-32 h-32 text-primary" />
+                    <Atom className="w-24 h-24 text-primary" />
                 </motion.div>
 
-                {/* Quote marks */}
-                <Quote className="absolute top-6 left-6 w-12 h-12 text-primary/20" />
-                <Quote className="absolute bottom-6 right-6 w-12 h-12 text-secondary/20 rotate-180" />
-
-                <div className="relative z-10 text-center max-w-3xl mx-auto">
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={isInView ? { opacity: 1 } : {}}
-                        transition={{ delay: 0.5, duration: 1 }}
-                        className="text-xl md:text-2xl font-light text-white italic mb-8 leading-relaxed"
-                    >
-                        &ldquo;The only way to do great work is to love what you do. Stay foolish, stay hungry, and never stop exploring the mysteries of science. Every experiment is a step closer to changing the world!&rdquo;
-                    </motion.p>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 15 }}
-                        animate={isInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ delay: 0.8, duration: 0.6 }}
-                        className="flex flex-col items-center gap-2"
-                    >
-                        <div className="flex items-center gap-2">
-                            <Sparkles className="w-4 h-4 text-secondary" />
-                            <span className="text-gradient font-bold text-lg">
-                                — Passion Fuels Discovery
-                            </span>
-                            <Sparkles className="w-4 h-4 text-primary" />
-                        </div>
-                        <span className="text-gray-500 text-sm">
-                            🧬 Science is the poetry of reality 🚀
-                        </span>
-                    </motion.div>
+                {/* Quote */}
+                <div className="relative max-w-3xl mx-auto text-center">
+                    <span className="absolute -top-4 left-0 text-5xl text-primary/30 font-display">"</span>
+                    <p className="font-display text-xl md:text-2xl text-paper-cream italic leading-relaxed px-8">
+                        {portfolioData.charpentierQuote.text}
+                    </p>
+                    <span className="absolute -bottom-4 right-0 text-5xl text-primary/30 font-display">"</span>
                 </div>
 
-                {/* Animated border glow */}
-                <motion.div
-                    animate={{
-                        background: [
-                            "linear-gradient(90deg, rgba(0,229,255,0.3), rgba(0,255,159,0.3), rgba(0,229,255,0.3))",
-                            "linear-gradient(180deg, rgba(0,255,159,0.3), rgba(0,229,255,0.3), rgba(0,255,159,0.3))",
-                            "linear-gradient(270deg, rgba(0,229,255,0.3), rgba(0,255,159,0.3), rgba(0,229,255,0.3))",
-                            "linear-gradient(360deg, rgba(0,255,159,0.3), rgba(0,229,255,0.3), rgba(0,255,159,0.3))"
-                        ]
-                    }}
-                    transition={{ duration: 5, repeat: Infinity }}
-                    className="absolute inset-0 rounded-3xl opacity-30 -z-10 blur-sm"
-                />
+                {/* Attribution */}
+                <div className="mt-8 pt-6 border-t border-white/10 text-center">
+                    <p className="font-mono text-sm text-primary font-medium">
+                        — {portfolioData.charpentierQuote.author}
+                    </p>
+                    <p className="font-mono text-xs text-paper-muted mt-1">
+                        {portfolioData.charpentierQuote.context}
+                    </p>
+                </div>
             </div>
         </motion.div>
     );
@@ -284,32 +191,28 @@ function MotivatingQuote() {
 // Stats row
 function SkillStats() {
     const stats = [
-        { value: portfolioData.skills.wet_lab.length, label: "Lab Techniques" },
-        { value: portfolioData.skills.ai.length, label: "AI/ML Tools" },
-        { value: portfolioData.skills.computational.length, label: "Computational" }
+        { value: portfolioData.skills.wet_lab.length, label: "Lab Techniques", color: "text-primary" },
+        { value: portfolioData.skills.ai.length, label: "AI/ML Tools", color: "text-tertiary" },
+        { value: portfolioData.skills.computational.length, label: "Computational", color: "text-secondary" }
     ];
 
     return (
-        <div className="grid grid-cols-3 gap-4 mb-10">
+        <div className="grid grid-cols-3 gap-4 mb-12">
             {stats.map((stat, index) => (
                 <motion.div
                     key={index}
-                    initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1, duration: 0.5 }}
-                    whileHover={{ scale: 1.05, y: -5 }}
-                    className="glass-card rounded-xl p-5 text-center border border-white/10 hover:border-primary/30 transition-all cursor-default"
+                    className="bg-surface border border-white/10 p-6 text-center hover:border-primary/30 transition-colors"
                 >
-                    <motion.span
-                        className="text-4xl font-bold text-gradient"
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        transition={{ delay: index * 0.1 + 0.2 }}
-                    >
+                    <span className={`font-display text-4xl font-bold ${stat.color}`}>
                         {stat.value}+
-                    </motion.span>
-                    <p className="text-gray-400 text-xs mt-1">{stat.label}</p>
+                    </span>
+                    <p className="font-mono text-xs text-paper-muted mt-2 uppercase tracking-wider">
+                        {stat.label}
+                    </p>
                 </motion.div>
             ))}
         </div>
@@ -332,23 +235,6 @@ export default function Skills() {
             subtitle="Bridging wet-lab biology with AI-driven computational approaches"
         >
             <div ref={containerRef} className="relative">
-                {/* Animated background blobs */}
-                <motion.div
-                    className="absolute inset-0 -z-10 opacity-30 pointer-events-none"
-                    style={{ y: backgroundY }}
-                >
-                    <motion.div
-                        animate={{ scale: [1, 1.1, 1], opacity: [0.15, 0.25, 0.15] }}
-                        transition={{ duration: 8, repeat: Infinity }}
-                        className="absolute top-1/4 left-1/4 w-72 h-72 bg-primary/20 rounded-full blur-[100px]"
-                    />
-                    <motion.div
-                        animate={{ scale: [1, 1.1, 1], opacity: [0.15, 0.25, 0.15] }}
-                        transition={{ duration: 8, repeat: Infinity, delay: 4 }}
-                        className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-secondary/20 rounded-full blur-[100px]"
-                    />
-                </motion.div>
-
                 {/* Stats */}
                 <SkillStats />
 
@@ -377,8 +263,8 @@ export default function Skills() {
                     />
                 </div>
 
-                {/* Motivating Life Quote */}
-                <MotivatingQuote />
+                {/* Charpentier Quote */}
+                <CharpentierQuote />
 
                 {/* Bottom decorative line */}
                 <motion.div
@@ -386,7 +272,7 @@ export default function Skills() {
                     whileInView={{ scaleX: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 1, delay: 0.5 }}
-                    className="mt-12 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent"
+                    className="mt-16 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent"
                 />
             </div>
         </SectionWrapper>

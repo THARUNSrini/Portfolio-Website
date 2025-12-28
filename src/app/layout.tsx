@@ -1,14 +1,32 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Cormorant_Garamond, IBM_Plex_Mono, Outfit } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import LenisProvider from "@/components/LenisProvider";
 import { cn } from "@/utils/cn";
 
-const inter = Inter({
+// Elegant serif for headlines - scientific journal aesthetic
+const cormorant = Cormorant_Garamond({
     subsets: ["latin"],
-    variable: "--font-inter",
-    display: "swap"
+    variable: "--font-display",
+    display: "swap",
+    weight: ["400", "500", "600", "700"]
+});
+
+// Technical precision for code/data elements
+const plexMono = IBM_Plex_Mono({
+    subsets: ["latin"],
+    variable: "--font-mono",
+    display: "swap",
+    weight: ["400", "500", "600"]
+});
+
+// Modern geometric sans for body text
+const outfit = Outfit({
+    subsets: ["latin"],
+    variable: "--font-body",
+    display: "swap",
+    weight: ["300", "400", "500", "600", "700"]
 });
 
 export const metadata: Metadata = {
@@ -70,8 +88,10 @@ export default function RootLayout({
     return (
         <html lang="en" className="scroll-smooth">
             <body className={cn(
-                inter.variable,
-                "font-sans min-h-screen bg-background text-white antialiased"
+                cormorant.variable,
+                plexMono.variable,
+                outfit.variable,
+                "font-body min-h-screen bg-background text-white antialiased"
             )}>
                 <LenisProvider>
                     <Navbar />

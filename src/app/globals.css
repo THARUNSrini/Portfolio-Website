@@ -3,17 +3,31 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 10, 17, 40;
-  --background-end-rgb: 0, 0, 0;
+  /* New "Lab Precision" color palette */
+  --ink-black: #0D0D0D;
+  --surface: #161616;
+  --surface-elevated: #1F1F1F;
 
-  /* Biotech color palette - NO PURPLE/MAGENTA */
-  --teal-primary: #00e5ff;
-  --teal-dark: #00b8d4;
-  --green-primary: #00ff9f;
-  --green-dark: #00c853;
-  --navy-deep: #0a1128;
-  --navy-light: #1a2744;
+  --amber-primary: #FFB800;
+  --amber-light: #FFCC33;
+  --amber-dark: #CC9200;
+
+  --green-primary: #22C55E;
+  --green-light: #4ADE80;
+  --green-dark: #16A34A;
+
+  --rose-primary: #F472B6;
+  --rose-light: #F9A8D4;
+
+  --blue-graph: #3B82F6;
+
+  --paper-cream: #F5F2EB;
+  --paper-muted: #A8A29E;
+
+  /* Legacy mapping */
+  --foreground-rgb: 245, 242, 235;
+  --background-start-rgb: 13, 13, 13;
+  --background-end-rgb: 0, 0, 0;
 }
 
 /* Lenis smooth scroll */
@@ -42,56 +56,152 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ============================================
+   BASE BODY STYLES - Lab Precision Theme
+   ============================================ */
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(135deg,
-      var(--navy-deep) 0%,
-      #050a15 100%);
+  color: var(--paper-cream);
+  background: var(--ink-black);
   overflow-x: hidden;
   min-height: 100vh;
+  position: relative;
 }
 
-/* Custom Scrollbar - Biotech Theme */
+/* Grid pattern overlay for depth */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    linear-gradient(rgba(255, 184, 0, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 184, 0, 0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Subtle noise texture */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.015;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR - Refined
+   ============================================ */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--navy-deep);
+  background: var(--ink-black);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, var(--teal-primary), var(--green-primary));
-  border-radius: 4px;
+  background: linear-gradient(to bottom, var(--amber-primary), var(--green-primary));
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--teal-primary);
+  background: var(--amber-primary);
 }
 
 ::selection {
-  background: var(--teal-primary);
-  color: var(--navy-deep);
+  background: var(--amber-primary);
+  color: var(--ink-black);
 }
 
-/* Glass Card Effect */
+/* ============================================
+   TYPOGRAPHY UTILITIES
+   ============================================ */
+.font-display {
+  font-family: var(--font-display), 'Cormorant Garamond', Georgia, serif;
+}
+
+.font-body {
+  font-family: var(--font-body), 'Outfit', system-ui, sans-serif;
+}
+
+.font-mono {
+  font-family: var(--font-mono), 'IBM Plex Mono', monospace;
+}
+
+/* Display headings - elegant serif */
+.heading-display {
+  font-family: var(--font-display), 'Cormorant Garamond', Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+/* Section labels - technical mono */
+.label-mono {
+  font-family: var(--font-mono), 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--amber-primary);
+}
+
+/* ============================================
+   CARD STYLES - Mix of Brutal & Refined
+   ============================================ */
 .glass-card {
-  background: rgba(10, 17, 40, 0.6);
+  background: rgba(22, 22, 22, 0.8);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 229, 255, 0.1);
+  border: 1px solid rgba(255, 184, 0, 0.1);
 }
 
 .glass-card-green {
-  background: rgba(10, 17, 40, 0.6);
+  background: rgba(22, 22, 22, 0.8);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 255, 159, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.1);
 }
 
-/* Text Gradients - Biotech Theme */
+/* Brutalist card - sharp edges, bold shadows */
+.brutal-card {
+  background: var(--surface);
+  border: 2px solid var(--amber-primary);
+  box-shadow: 4px 4px 0px 0px var(--amber-primary);
+  transition: all 0.2s ease;
+}
+
+.brutal-card:hover {
+  box-shadow: 6px 6px 0px 0px var(--amber-primary);
+  transform: translate(-2px, -2px);
+}
+
+.brutal-card-green {
+  background: var(--surface);
+  border: 2px solid var(--green-primary);
+  box-shadow: 4px 4px 0px 0px var(--green-primary);
+  transition: all 0.2s ease;
+}
+
+.brutal-card-green:hover {
+  box-shadow: 6px 6px 0px 0px var(--green-primary);
+  transform: translate(-2px, -2px);
+}
+
+/* ============================================
+   TEXT GRADIENTS - New Palette
+   ============================================ */
 .text-gradient {
-  background: linear-gradient(135deg, var(--teal-primary) 0%, var(--green-primary) 50%, var(--teal-primary) 100%);
+  background: linear-gradient(135deg, var(--amber-primary) 0%, var(--green-primary) 50%, var(--amber-primary) 100%);
   background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -99,15 +209,22 @@ body {
   animation: gradient-shift 4s ease infinite;
 }
 
-.text-gradient-teal {
-  background: linear-gradient(135deg, var(--teal-primary) 0%, var(--teal-dark) 100%);
+.text-gradient-amber {
+  background: linear-gradient(135deg, var(--amber-primary) 0%, var(--amber-light) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .text-gradient-green {
-  background: linear-gradient(135deg, var(--green-primary) 0%, var(--green-dark) 100%);
+  background: linear-gradient(135deg, var(--green-primary) 0%, var(--green-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-warm {
+  background: linear-gradient(135deg, var(--amber-primary) 0%, var(--rose-primary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -125,24 +242,48 @@ body {
   }
 }
 
-/* Neon Glow Effects - Teal/Green Only */
+/* ============================================
+   NEON & GLOW EFFECTS - Updated Colors
+   ============================================ */
 .neon-glow {
-  box-shadow: 0 0 10px rgba(0, 229, 255, 0.5), 0 0 20px rgba(0, 229, 255, 0.3);
+  box-shadow: 0 0 10px rgba(255, 184, 0, 0.5), 0 0 20px rgba(255, 184, 0, 0.3);
 }
 
 .neon-glow-green {
-  box-shadow: 0 0 10px rgba(0, 255, 159, 0.5), 0 0 20px rgba(0, 255, 159, 0.3);
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.5), 0 0 20px rgba(34, 197, 94, 0.3);
 }
 
 .neon-glow-intense {
   box-shadow:
-    0 0 5px rgba(0, 229, 255, 0.8),
-    0 0 15px rgba(0, 229, 255, 0.6),
-    0 0 30px rgba(0, 229, 255, 0.4),
-    0 0 60px rgba(0, 229, 255, 0.2);
+    0 0 5px rgba(255, 184, 0, 0.8),
+    0 0 15px rgba(255, 184, 0, 0.6),
+    0 0 30px rgba(255, 184, 0, 0.4),
+    0 0 60px rgba(255, 184, 0, 0.2);
 }
 
-/* Glitch Effect - Updated Colors */
+/* Utility text neon */
+.text-neon-amber {
+  color: var(--amber-primary);
+  text-shadow: 0 0 10px rgba(255, 184, 0, 0.5);
+}
+
+.text-neon-green {
+  color: var(--green-primary);
+  text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+}
+
+/* Hover neon effects */
+.hover\:neon-glow-amber:hover {
+  box-shadow: 0 0 20px rgba(255, 184, 0, 0.6), 0 0 40px rgba(255, 184, 0, 0.3);
+}
+
+.hover\:neon-glow-green:hover {
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.6), 0 0 40px rgba(34, 197, 94, 0.3);
+}
+
+/* ============================================
+   GLITCH EFFECT - Lab Precision Colors
+   ============================================ */
 .glitch {
   position: relative;
 }
@@ -156,7 +297,7 @@ body {
 
 .glitch-layer-1 {
   animation: glitch-1 0.3s infinite linear alternate-reverse;
-  color: var(--teal-primary);
+  color: var(--amber-primary);
 }
 
 .glitch-layer-2 {
@@ -222,7 +363,9 @@ body {
   }
 }
 
-/* Three.js canvas container */
+/* ============================================
+   SCENE & CANVAS CONTAINERS
+   ============================================ */
 #canvas-container {
   position: fixed;
   top: 0;
@@ -233,43 +376,24 @@ body {
   pointer-events: none;
 }
 
-/* 3D Scene Container */
 .scene-container {
   position: absolute;
   inset: 0;
   z-index: 0;
 }
 
-/* Utility classes for neon text colors */
-.text-neon-teal {
-  color: var(--teal-primary);
-  text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
-}
-
-.text-neon-green {
-  color: var(--green-primary);
-  text-shadow: 0 0 10px rgba(0, 255, 159, 0.5);
-}
-
-/* Hover neon effects */
-.hover\:neon-glow-teal:hover {
-  box-shadow: 0 0 20px rgba(0, 229, 255, 0.6), 0 0 40px rgba(0, 229, 255, 0.3);
-}
-
-.hover\:neon-glow-green:hover {
-  box-shadow: 0 0 20px rgba(0, 255, 159, 0.6), 0 0 40px rgba(0, 255, 159, 0.3);
-}
-
-/* Animated pulse for timeline dots */
-@keyframes pulse-glow-teal {
+/* ============================================
+   PULSE ANIMATIONS - Updated Colors
+   ============================================ */
+@keyframes pulse-glow-amber {
 
   0%,
   100% {
-    box-shadow: 0 0 5px rgba(0, 229, 255, 0.5), 0 0 10px rgba(0, 229, 255, 0.3);
+    box-shadow: 0 0 5px rgba(255, 184, 0, 0.5), 0 0 10px rgba(255, 184, 0, 0.3);
   }
 
   50% {
-    box-shadow: 0 0 15px rgba(0, 229, 255, 0.8), 0 0 25px rgba(0, 229, 255, 0.5);
+    box-shadow: 0 0 15px rgba(255, 184, 0, 0.8), 0 0 25px rgba(255, 184, 0, 0.5);
   }
 }
 
@@ -277,30 +401,32 @@ body {
 
   0%,
   100% {
-    box-shadow: 0 0 5px rgba(0, 255, 159, 0.5), 0 0 10px rgba(0, 255, 159, 0.3);
+    box-shadow: 0 0 5px rgba(34, 197, 94, 0.5), 0 0 10px rgba(34, 197, 94, 0.3);
   }
 
   50% {
-    box-shadow: 0 0 15px rgba(0, 255, 159, 0.8), 0 0 25px rgba(0, 255, 159, 0.5);
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.8), 0 0 25px rgba(34, 197, 94, 0.5);
   }
 }
 
 .animate-pulse-glow {
-  animation: pulse-glow-teal 2s ease-in-out infinite;
+  animation: pulse-glow-amber 2s ease-in-out infinite;
 }
 
 .animate-pulse-glow-green {
   animation: pulse-glow-green 2s ease-in-out infinite;
 }
 
-/* Holographic effect for 3D elements */
+/* ============================================
+   HOLOGRAPHIC & LAB EFFECTS
+   ============================================ */
 .holographic {
   background: linear-gradient(45deg,
-      rgba(0, 229, 255, 0.1) 0%,
-      rgba(0, 255, 159, 0.1) 25%,
-      rgba(0, 229, 255, 0.1) 50%,
-      rgba(0, 255, 159, 0.1) 75%,
-      rgba(0, 229, 255, 0.1) 100%);
+      rgba(255, 184, 0, 0.1) 0%,
+      rgba(34, 197, 94, 0.1) 25%,
+      rgba(244, 114, 182, 0.1) 50%,
+      rgba(59, 130, 246, 0.1) 75%,
+      rgba(255, 184, 0, 0.1) 100%);
   background-size: 400% 400%;
   animation: holographic-shift 10s ease infinite;
 }
@@ -317,20 +443,21 @@ body {
   }
 }
 
-/* Lab equipment glow */
 .lab-glow {
-  filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.6));
+  filter: drop-shadow(0 0 8px rgba(255, 184, 0, 0.6));
 }
 
 .lab-glow-green {
-  filter: drop-shadow(0 0 8px rgba(0, 255, 159, 0.6));
+  filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.6));
 }
 
-/* Typewriter cursor */
+/* ============================================
+   TYPEWRITER CURSOR
+   ============================================ */
 .typewriter-cursor::after {
   content: '|';
   animation: blink 0.75s step-end infinite;
-  color: var(--teal-primary);
+  color: var(--amber-primary);
 }
 
 @keyframes blink {
@@ -345,20 +472,23 @@ body {
   }
 }
 
-/* Smooth transitions for all interactive elements */
+/* ============================================
+   INTERACTIVE ELEMENTS
+   ============================================ */
 a,
 button {
   transition: all 0.3s ease;
 }
 
-/* Focus styles for accessibility */
 a:focus-visible,
 button:focus-visible {
-  outline: 2px solid var(--teal-primary);
+  outline: 2px solid var(--amber-primary);
   outline-offset: 2px;
 }
 
-/* 3D Card hover effect */
+/* ============================================
+   3D CARD EFFECT
+   ============================================ */
 .card-3d {
   transform-style: preserve-3d;
   transition: transform 0.5s ease;
@@ -368,7 +498,9 @@ button:focus-visible {
   transform: perspective(1000px) rotateY(5deg) rotateX(5deg);
 }
 
-/* Floating animation for lab equipment */
+/* ============================================
+   FLOATING & DNA ANIMATIONS
+   ============================================ */
 @keyframes lab-float {
 
   0%,
@@ -393,7 +525,6 @@ button:focus-visible {
   animation: lab-float 6s ease-in-out infinite;
 }
 
-/* DNA strand animation */
 @keyframes dna-pulse {
 
   0%,
@@ -412,7 +543,9 @@ button:focus-visible {
   animation: dna-pulse 3s ease-in-out infinite;
 }
 
-/* Section reveal animation */
+/* ============================================
+   SECTION REVEAL ANIMATION
+   ============================================ */
 @keyframes section-reveal {
   from {
     opacity: 0;
@@ -429,7 +562,9 @@ button:focus-visible {
   animation: section-reveal 0.8s ease-out forwards;
 }
 
-/* Particle burst effect */
+/* ============================================
+   PARTICLE BURST
+   ============================================ */
 @keyframes particle-burst {
   0% {
     transform: translate(0, 0) scale(1);
@@ -444,4 +579,166 @@ button:focus-visible {
 
 .particle-burst {
   animation: particle-burst 1s ease-out forwards;
+}
+
+/* ============================================
+   STAGGERED PAGE LOAD ANIMATIONS
+   ============================================ */
+.animate-stagger-1 {
+  animation-delay: 0.1s;
+}
+
+.animate-stagger-2 {
+  animation-delay: 0.2s;
+}
+
+.animate-stagger-3 {
+  animation-delay: 0.3s;
+}
+
+.animate-stagger-4 {
+  animation-delay: 0.4s;
+}
+
+.animate-stagger-5 {
+  animation-delay: 0.5s;
+}
+
+.animate-stagger-6 {
+  animation-delay: 0.6s;
+}
+
+.animate-stagger-7 {
+  animation-delay: 0.7s;
+}
+
+.animate-stagger-8 {
+  animation-delay: 0.8s;
+}
+
+/* Orchestrated reveal */
+.orchestrated-reveal {
+  opacity: 0;
+  animation: fade-up 0.6s ease-out forwards;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   MEASUREMENT / SCIENTIFIC DECORATIONS
+   ============================================ */
+.measurement-line {
+  position: relative;
+}
+
+.measurement-line::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 30px;
+  height: 2px;
+  background: var(--amber-primary);
+  transform: translateY(-50%);
+}
+
+.measurement-line::after {
+  content: '';
+  position: absolute;
+  left: 30px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border: 2px solid var(--amber-primary);
+  border-radius: 50%;
+  transform: translateY(-50%);
+  background: var(--ink-black);
+}
+
+/* Corner brackets */
+.corner-brackets {
+  position: relative;
+}
+
+.corner-brackets::before,
+.corner-brackets::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: var(--amber-primary);
+  border-style: solid;
+  border-width: 0;
+}
+
+.corner-brackets::before {
+  top: -1px;
+  left: -1px;
+  border-top-width: 2px;
+  border-left-width: 2px;
+}
+
+.corner-brackets::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom-width: 2px;
+  border-right-width: 2px;
+}
+
+/* ============================================
+   SHIMMER LOADING EFFECT
+   ============================================ */
+.shimmer {
+  background: linear-gradient(90deg,
+      rgba(255, 184, 0, 0) 0%,
+      rgba(255, 184, 0, 0.1) 50%,
+      rgba(255, 184, 0, 0) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* ============================================
+   DIVIDERS - Scientific Style
+   ============================================ */
+.divider-scientific {
+  position: relative;
+  height: 1px;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 184, 0, 0.3) 20%,
+      rgba(255, 184, 0, 0.5) 50%,
+      rgba(255, 184, 0, 0.3) 80%,
+      transparent 100%);
+}
+
+.divider-scientific::before {
+  content: '◆';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--amber-primary);
+  font-size: 10px;
+  background: var(--ink-black);
+  padding: 0 10px;
 }

@@ -4,33 +4,32 @@ import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import { portfolioData } from "@/lib/data";
-import { Award, GraduationCap, BadgeCheck } from "lucide-react";
+import { BadgeCheck, GraduationCap } from "lucide-react";
 
-// Certification card
-function CertificationCard({
+// Certification item with brutalist styling
+function CertificationItem({
     certification,
     index
 }: {
     certification: string;
     index: number;
 }) {
-    const cardRef = useRef<HTMLDivElement>(null);
-    const isInView = useInView(cardRef, { once: true, margin: "-20px" });
+    const itemRef = useRef<HTMLDivElement>(null);
+    const isInView = useInView(itemRef, { once: true, margin: "-20px" });
 
     return (
         <motion.div
-            ref={cardRef}
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-            transition={{ delay: index * 0.08, duration: 0.4, ease: "easeOut" }}
-            whileHover={{ y: -3, transition: { duration: 0.2 } }}
+            ref={itemRef}
+            initial={{ opacity: 0, x: -20 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ delay: index * 0.08, duration: 0.4 }}
             className="group"
         >
-            <div className="glass-card rounded-xl p-4 border border-white/10 hover:border-primary/40 transition-all duration-300 h-full flex items-start gap-3">
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
-                    <BadgeCheck className="w-5 h-5 text-primary" />
+            <div className="flex items-start gap-3 p-4 bg-surface border border-white/10 hover:border-primary/40 transition-all duration-200 hover:translate-x-1">
+                <div className="w-8 h-8 border border-primary bg-surface flex items-center justify-center flex-shrink-0">
+                    <BadgeCheck className="w-4 h-4 text-primary" />
                 </div>
-                <p className="text-sm text-gray-300 group-hover:text-white transition-colors leading-relaxed">
+                <p className="font-body text-sm text-paper-muted group-hover:text-paper-cream transition-colors leading-relaxed">
                     {certification}
                 </p>
             </div>
@@ -45,9 +44,9 @@ export default function Certifications() {
             title="Certifications"
             subtitle="Continuous learning across genomics, bioinformatics, and CRISPR technologies"
         >
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {portfolioData.certifications.map((cert, index) => (
-                    <CertificationCard key={index} certification={cert} index={index} />
+                    <CertificationItem key={index} certification={cert} index={index} />
                 ))}
             </div>
 
@@ -57,12 +56,13 @@ export default function Certifications() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.5, duration: 0.6 }}
-                className="mt-10 flex items-center justify-center gap-2"
+                className="mt-12 flex items-center gap-4"
             >
-                <div className="flex items-center gap-2 px-4 py-2 rounded-full glass-card border border-white/10">
-                    <GraduationCap className="w-4 h-4 text-secondary" />
-                    <span className="text-sm text-gray-400">
-                        <span className="text-white font-semibold">{portfolioData.certifications.length}</span> certifications from leading institutions
+                <div className="w-12 h-px bg-secondary/30" />
+                <div className="flex items-center gap-3 px-4 py-2 border border-white/10 bg-surface">
+                    <GraduationCap className="w-5 h-5 text-secondary" />
+                    <span className="font-mono text-sm text-paper-muted">
+                        <span className="text-paper-cream font-bold">{portfolioData.certifications.length}</span> certifications from leading institutions
                     </span>
                 </div>
             </motion.div>
