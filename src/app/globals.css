@@ -3,31 +3,31 @@
 @tailwind utilities;
 
 :root {
-  /* New "Lab Precision" color palette */
-  --ink-black: #0D0D0D;
-  --surface: #161616;
-  --surface-elevated: #1F1F1F;
+  /* Cinematic Bioluminescent Lab palette */
+  --bg-deep: #050d1a;
+  --bg-surface: rgba(10, 25, 47, 0.6);
+  --bg-elevated: rgba(15, 35, 60, 0.7);
 
-  --amber-primary: #FFB800;
+  --cyan-primary: #00f5d4;
+  --cyan-light: #72fce8;
+  --cyan-dark: #00c4a7;
+
+  --green-primary: #39ff14;
+  --green-light: #7aff5a;
+  --green-dark: #2acc10;
+
+  --amber-warm: #FFB800;
   --amber-light: #FFCC33;
-  --amber-dark: #CC9200;
 
-  --green-primary: #22C55E;
-  --green-light: #4ADE80;
-  --green-dark: #16A34A;
+  --rose-accent: #F472B6;
 
-  --rose-primary: #F472B6;
-  --rose-light: #F9A8D4;
+  --text-primary: #e0f7fa;
+  --text-muted: #7aa2b3;
+  --text-dim: #4a6a7a;
 
-  --blue-graph: #3B82F6;
-
-  --paper-cream: #F5F2EB;
-  --paper-muted: #A8A29E;
-
-  /* Legacy mapping */
-  --foreground-rgb: 245, 242, 235;
-  --background-start-rgb: 13, 13, 13;
-  --background-end-rgb: 0, 0, 0;
+  --glow-cyan: rgba(0, 245, 212, 0.5);
+  --glow-green: rgba(57, 255, 20, 0.4);
+  --glow-amber: rgba(255, 184, 0, 0.5);
 }
 
 /* Lenis smooth scroll */
@@ -57,151 +57,178 @@ html {
 }
 
 /* ============================================
-   BASE BODY STYLES - Lab Precision Theme
+   BASE BODY — Bioluminescent Lab
    ============================================ */
 body {
-  color: var(--paper-cream);
-  background: var(--ink-black);
+  color: var(--text-primary);
+  background: var(--bg-deep);
   overflow-x: hidden;
   min-height: 100vh;
   position: relative;
 }
 
-/* Grid pattern overlay for depth */
+/* Hexagonal grid pattern — breathing opacity */
 body::before {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background-image:
-    linear-gradient(rgba(255, 184, 0, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 184, 0, 0.02) 1px, transparent 1px);
-  background-size: 60px 60px;
+    radial-gradient(circle at 1px 1px, rgba(0, 245, 212, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
   pointer-events: none;
   z-index: 0;
+  animation: hex-breathe 8s ease-in-out infinite;
 }
 
-/* Subtle noise texture */
+/* Subtle noise grain */
 body::after {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.015;
+  inset: 0;
+  opacity: 0.02;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 1;
 }
 
+@keyframes hex-breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
 /* ============================================
-   CUSTOM SCROLLBAR - Refined
+   SCROLLBAR — Bioluminescent
    ============================================ */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--ink-black);
+  background: var(--bg-deep);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, var(--amber-primary), var(--green-primary));
+  background: linear-gradient(to bottom, var(--cyan-primary), var(--green-primary));
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--amber-primary);
+  background: var(--cyan-primary);
 }
 
 ::selection {
-  background: var(--amber-primary);
-  color: var(--ink-black);
+  background: var(--cyan-primary);
+  color: var(--bg-deep);
 }
 
 /* ============================================
    TYPOGRAPHY UTILITIES
    ============================================ */
 .font-display {
-  font-family: var(--font-display), 'Cormorant Garamond', Georgia, serif;
+  font-family: 'Clash Display', system-ui, sans-serif;
 }
 
 .font-body {
-  font-family: var(--font-body), 'Outfit', system-ui, sans-serif;
+  font-family: 'Satoshi', system-ui, sans-serif;
 }
 
 .font-mono {
-  font-family: var(--font-mono), 'IBM Plex Mono', monospace;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
-/* Display headings - elegant serif */
 .heading-display {
-  font-family: var(--font-display), 'Cormorant Garamond', Georgia, serif;
+  font-family: 'Clash Display', system-ui, sans-serif;
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.1;
 }
 
-/* Section labels - technical mono */
 .label-mono {
-  font-family: var(--font-mono), 'IBM Plex Mono', monospace;
+  font-family: 'Satoshi', system-ui, sans-serif;
   font-size: 0.75rem;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--amber-primary);
+  color: var(--cyan-primary);
 }
 
 /* ============================================
-   CARD STYLES - Mix of Brutal & Refined
+   GLASS PANEL — Core Design Primitive
    ============================================ */
-.glass-card {
-  background: rgba(22, 22, 22, 0.8);
+.glass-panel {
+  background: var(--bg-surface);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 184, 0, 0.1);
+  border: 1px solid rgba(0, 245, 212, 0.08);
+  border-radius: 12px;
 }
 
-.glass-card-green {
-  background: rgba(22, 22, 22, 0.8);
+.glass-panel-strong {
+  background: var(--bg-elevated);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 245, 212, 0.12);
+  border-radius: 12px;
+}
+
+.glass-panel:hover {
+  border-color: rgba(0, 245, 212, 0.2);
+}
+
+/* Gradient border sweep on hover */
+.glass-panel-glow {
+  position: relative;
+  background: var(--bg-surface);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(34, 197, 94, 0.1);
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
 }
 
-/* Brutalist card - sharp edges, bold shadows */
-.brutal-card {
-  background: var(--surface);
-  border: 2px solid var(--amber-primary);
-  box-shadow: 4px 4px 0px 0px var(--amber-primary);
-  transition: all 0.2s ease;
+.glass-panel-glow::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 13px;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 245, 212, 0.0) 0%,
+    rgba(0, 245, 212, 0.0) 40%,
+    rgba(0, 245, 212, 0.2) 50%,
+    rgba(0, 245, 212, 0.0) 60%,
+    rgba(0, 245, 212, 0.0) 100%
+  );
+  background-size: 300% 300%;
+  z-index: -1;
+  animation: border-sweep 4s ease infinite;
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
-.brutal-card:hover {
-  box-shadow: 6px 6px 0px 0px var(--amber-primary);
-  transform: translate(-2px, -2px);
+.glass-panel-glow:hover::before {
+  opacity: 1;
 }
 
-.brutal-card-green {
-  background: var(--surface);
-  border: 2px solid var(--green-primary);
-  box-shadow: 4px 4px 0px 0px var(--green-primary);
-  transition: all 0.2s ease;
+@keyframes border-sweep {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
 }
 
-.brutal-card-green:hover {
-  box-shadow: 6px 6px 0px 0px var(--green-primary);
-  transform: translate(-2px, -2px);
+/* Frosted navigation */
+.frosted-nav {
+  background: rgba(5, 13, 26, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 245, 212, 0.06);
 }
 
 /* ============================================
-   TEXT GRADIENTS - New Palette
+   TEXT GRADIENTS
    ============================================ */
 .text-gradient {
-  background: linear-gradient(135deg, var(--amber-primary) 0%, var(--green-primary) 50%, var(--amber-primary) 100%);
+  background: linear-gradient(135deg, var(--cyan-primary) 0%, var(--green-primary) 50%, var(--cyan-primary) 100%);
   background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -209,8 +236,8 @@ body::after {
   animation: gradient-shift 4s ease infinite;
 }
 
-.text-gradient-amber {
-  background: linear-gradient(135deg, var(--amber-primary) 0%, var(--amber-light) 100%);
+.text-gradient-cyan {
+  background: linear-gradient(135deg, var(--cyan-primary) 0%, var(--cyan-light) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -224,154 +251,155 @@ body::after {
 }
 
 .text-gradient-warm {
-  background: linear-gradient(135deg, var(--amber-primary) 0%, var(--rose-primary) 100%);
+  background: linear-gradient(135deg, var(--amber-warm) 0%, var(--rose-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Legacy compatibility */
+.text-gradient-amber {
+  background: linear-gradient(135deg, var(--cyan-primary) 0%, var(--cyan-light) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 @keyframes gradient-shift {
-
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 /* ============================================
-   NEON & GLOW EFFECTS - Updated Colors
+   GLOW EFFECTS — Bioluminescent
    ============================================ */
 .neon-glow {
-  box-shadow: 0 0 10px rgba(255, 184, 0, 0.5), 0 0 20px rgba(255, 184, 0, 0.3);
+  box-shadow: 0 0 10px var(--glow-cyan), 0 0 20px rgba(0, 245, 212, 0.2);
 }
 
 .neon-glow-green {
-  box-shadow: 0 0 10px rgba(34, 197, 94, 0.5), 0 0 20px rgba(34, 197, 94, 0.3);
+  box-shadow: 0 0 10px var(--glow-green), 0 0 20px rgba(57, 255, 20, 0.2);
 }
 
-.neon-glow-intense {
-  box-shadow:
-    0 0 5px rgba(255, 184, 0, 0.8),
-    0 0 15px rgba(255, 184, 0, 0.6),
-    0 0 30px rgba(255, 184, 0, 0.4),
-    0 0 60px rgba(255, 184, 0, 0.2);
+.neon-glow-amber {
+  box-shadow: 0 0 10px var(--glow-amber), 0 0 20px rgba(255, 184, 0, 0.2);
 }
 
-/* Utility text neon */
-.text-neon-amber {
-  color: var(--amber-primary);
-  text-shadow: 0 0 10px rgba(255, 184, 0, 0.5);
+.text-neon-cyan {
+  color: var(--cyan-primary);
+  text-shadow: 0 0 10px var(--glow-cyan);
 }
 
 .text-neon-green {
   color: var(--green-primary);
-  text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
-}
-
-/* Hover neon effects */
-.hover\:neon-glow-amber:hover {
-  box-shadow: 0 0 20px rgba(255, 184, 0, 0.6), 0 0 40px rgba(255, 184, 0, 0.3);
-}
-
-.hover\:neon-glow-green:hover {
-  box-shadow: 0 0 20px rgba(34, 197, 94, 0.6), 0 0 40px rgba(34, 197, 94, 0.3);
+  text-shadow: 0 0 10px var(--glow-green);
 }
 
 /* ============================================
-   GLITCH EFFECT - Lab Precision Colors
+   SCANNER RING — Hero Portrait Effect
    ============================================ */
-.glitch {
-  position: relative;
+@keyframes scanner-ring {
+  0% {
+    transform: rotate(0deg);
+    box-shadow: 0 0 15px var(--glow-cyan), inset 0 0 15px var(--glow-cyan);
+  }
+  50% {
+    box-shadow: 0 0 30px var(--glow-cyan), inset 0 0 25px rgba(0, 245, 212, 0.3);
+  }
+  100% {
+    transform: rotate(360deg);
+    box-shadow: 0 0 15px var(--glow-cyan), inset 0 0 15px var(--glow-cyan);
+  }
 }
 
-.glitch-layer {
+.scanner-ring {
+  animation: scanner-ring 6s linear infinite;
+  border: 2px solid rgba(0, 245, 212, 0.3);
+  border-radius: 50%;
+}
+
+/* ============================================
+   LIQUID FILL — Timeline Beaker Effect
+   ============================================ */
+@keyframes liquid-fill {
+  from { height: 0%; }
+  to { height: 100%; }
+}
+
+.liquid-fill {
+  animation: liquid-fill 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ============================================
+   SCANLINE SWEEP — Card Hover Effect
+   ============================================ */
+@keyframes scanline-sweep {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(100%); }
+}
+
+.scanline-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0.8;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 245, 212, 0.06) 45%,
+    rgba(0, 245, 212, 0.12) 50%,
+    rgba(0, 245, 212, 0.06) 55%,
+    transparent 100%
+  );
+  opacity: 0;
+  pointer-events: none;
+  border-radius: inherit;
 }
 
-.glitch-layer-1 {
-  animation: glitch-1 0.3s infinite linear alternate-reverse;
-  color: var(--amber-primary);
+.group:hover .scanline-overlay {
+  opacity: 1;
+  animation: scanline-sweep 1s ease-in-out;
 }
 
-.glitch-layer-2 {
-  animation: glitch-2 0.3s infinite linear alternate-reverse;
-  color: var(--green-primary);
+/* ============================================
+   CLIP-PATH TEXT REVEAL — Scroll-Driven
+   ============================================ */
+@keyframes clip-reveal-up {
+  from { clip-path: inset(100% 0 0 0); }
+  to { clip-path: inset(0 0 0 0); }
 }
 
-@keyframes glitch-1 {
-
-  0%,
-  100% {
-    clip-path: inset(40% 0 61% 0);
-    transform: translate(-2px, 0);
-  }
-
-  20% {
-    clip-path: inset(92% 0 1% 0);
-    transform: translate(2px, 0);
-  }
-
-  40% {
-    clip-path: inset(43% 0 1% 0);
-    transform: translate(-2px, 0);
-  }
-
-  60% {
-    clip-path: inset(25% 0 58% 0);
-    transform: translate(2px, 0);
-  }
-
-  80% {
-    clip-path: inset(54% 0 7% 0);
-    transform: translate(-2px, 0);
-  }
+.clip-reveal {
+  clip-path: inset(100% 0 0 0);
+  animation: clip-reveal-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes glitch-2 {
-
-  0%,
-  100% {
-    clip-path: inset(65% 0 25% 0);
-    transform: translate(2px, 0);
-  }
-
-  20% {
-    clip-path: inset(10% 0 85% 0);
-    transform: translate(-2px, 0);
-  }
-
-  40% {
-    clip-path: inset(77% 0 5% 0);
-    transform: translate(2px, 0);
-  }
-
-  60% {
-    clip-path: inset(20% 0 67% 0);
-    transform: translate(-2px, 0);
-  }
-
-  80% {
-    clip-path: inset(48% 0 33% 0);
-    transform: translate(2px, 0);
-  }
+/* ============================================
+   PULSE GLOW — Badge / Node Effects
+   ============================================ */
+@keyframes pulse-glow-cyan {
+  0%, 100% { box-shadow: 0 0 5px var(--glow-cyan), 0 0 10px rgba(0, 245, 212, 0.2); }
+  50% { box-shadow: 0 0 15px var(--glow-cyan), 0 0 30px rgba(0, 245, 212, 0.4); }
 }
+
+@keyframes pulse-glow-amber {
+  0%, 100% { box-shadow: 0 0 5px var(--glow-amber), 0 0 10px rgba(255, 184, 0, 0.2); }
+  50% { box-shadow: 0 0 15px var(--glow-amber), 0 0 30px rgba(255, 184, 0, 0.4); }
+}
+
+@keyframes pulse-glow-green {
+  0%, 100% { box-shadow: 0 0 5px var(--glow-green), 0 0 10px rgba(57, 255, 20, 0.2); }
+  50% { box-shadow: 0 0 15px var(--glow-green), 0 0 30px rgba(57, 255, 20, 0.4); }
+}
+
+.animate-pulse-glow { animation: pulse-glow-cyan 2s ease-in-out infinite; }
+.animate-pulse-glow-amber { animation: pulse-glow-amber 2s ease-in-out infinite; }
+.animate-pulse-glow-green { animation: pulse-glow-green 2s ease-in-out infinite; }
 
 /* ============================================
    SCENE & CANVAS CONTAINERS
    ============================================ */
 #canvas-container {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   z-index: -1;
   pointer-events: none;
 }
@@ -383,352 +411,61 @@ body::after {
 }
 
 /* ============================================
-   PULSE ANIMATIONS - Updated Colors
+   HOLOGRAPHIC TILT — Project Cards
    ============================================ */
-@keyframes pulse-glow-amber {
-
-  0%,
-  100% {
-    box-shadow: 0 0 5px rgba(255, 184, 0, 0.5), 0 0 10px rgba(255, 184, 0, 0.3);
-  }
-
-  50% {
-    box-shadow: 0 0 15px rgba(255, 184, 0, 0.8), 0 0 25px rgba(255, 184, 0, 0.5);
-  }
-}
-
-@keyframes pulse-glow-green {
-
-  0%,
-  100% {
-    box-shadow: 0 0 5px rgba(34, 197, 94, 0.5), 0 0 10px rgba(34, 197, 94, 0.3);
-  }
-
-  50% {
-    box-shadow: 0 0 15px rgba(34, 197, 94, 0.8), 0 0 25px rgba(34, 197, 94, 0.5);
-  }
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow-amber 2s ease-in-out infinite;
-}
-
-.animate-pulse-glow-green {
-  animation: pulse-glow-green 2s ease-in-out infinite;
-}
-
-/* ============================================
-   HOLOGRAPHIC & LAB EFFECTS
-   ============================================ */
-.holographic {
-  background: linear-gradient(45deg,
-      rgba(255, 184, 0, 0.1) 0%,
-      rgba(34, 197, 94, 0.1) 25%,
-      rgba(244, 114, 182, 0.1) 50%,
-      rgba(59, 130, 246, 0.1) 75%,
-      rgba(255, 184, 0, 0.1) 100%);
-  background-size: 400% 400%;
-  animation: holographic-shift 10s ease infinite;
-}
-
-@keyframes holographic-shift {
-
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-.lab-glow {
-  filter: drop-shadow(0 0 8px rgba(255, 184, 0, 0.6));
-}
-
-.lab-glow-green {
-  filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.6));
-}
-
-/* ============================================
-   TYPEWRITER CURSOR
-   ============================================ */
-.typewriter-cursor::after {
-  content: '|';
-  animation: blink 0.75s step-end infinite;
-  color: var(--amber-primary);
-}
-
-@keyframes blink {
-
-  from,
-  to {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0;
-  }
+.holographic-card {
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out;
 }
 
 /* ============================================
    INTERACTIVE ELEMENTS
    ============================================ */
-a,
-button {
+a, button {
   transition: all 0.3s ease;
 }
 
 a:focus-visible,
 button:focus-visible {
-  outline: 2px solid var(--amber-primary);
+  outline: 2px solid var(--cyan-primary);
   outline-offset: 2px;
 }
 
-/* ============================================
-   3D CARD EFFECT
-   ============================================ */
-.card-3d {
-  transform-style: preserve-3d;
-  transition: transform 0.5s ease;
-}
-
-.card-3d:hover {
-  transform: perspective(1000px) rotateY(5deg) rotateX(5deg);
+/* Glowing focus ring for inputs */
+input:focus, textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--cyan-primary), 0 0 15px rgba(0, 245, 212, 0.2);
 }
 
 /* ============================================
-   FLOATING & DNA ANIMATIONS
-   ============================================ */
-@keyframes lab-float {
-
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-
-  25% {
-    transform: translateY(-5px) rotate(1deg);
-  }
-
-  50% {
-    transform: translateY(-10px) rotate(0deg);
-  }
-
-  75% {
-    transform: translateY(-5px) rotate(-1deg);
-  }
-}
-
-.animate-lab-float {
-  animation: lab-float 6s ease-in-out infinite;
-}
-
-@keyframes dna-pulse {
-
-  0%,
-  100% {
-    opacity: 0.8;
-    transform: scale(1);
-  }
-
-  50% {
-    opacity: 1;
-    transform: scale(1.05);
-  }
-}
-
-.animate-dna-pulse {
-  animation: dna-pulse 3s ease-in-out infinite;
-}
-
-/* ============================================
-   SECTION REVEAL ANIMATION
-   ============================================ */
-@keyframes section-reveal {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.section-reveal {
-  animation: section-reveal 0.8s ease-out forwards;
-}
-
-/* ============================================
-   PARTICLE BURST
-   ============================================ */
-@keyframes particle-burst {
-  0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 1;
-  }
-
-  100% {
-    transform: translate(var(--tx, 50px), var(--ty, -50px)) scale(0);
-    opacity: 0;
-  }
-}
-
-.particle-burst {
-  animation: particle-burst 1s ease-out forwards;
-}
-
-/* ============================================
-   STAGGERED PAGE LOAD ANIMATIONS
-   ============================================ */
-.animate-stagger-1 {
-  animation-delay: 0.1s;
-}
-
-.animate-stagger-2 {
-  animation-delay: 0.2s;
-}
-
-.animate-stagger-3 {
-  animation-delay: 0.3s;
-}
-
-.animate-stagger-4 {
-  animation-delay: 0.4s;
-}
-
-.animate-stagger-5 {
-  animation-delay: 0.5s;
-}
-
-.animate-stagger-6 {
-  animation-delay: 0.6s;
-}
-
-.animate-stagger-7 {
-  animation-delay: 0.7s;
-}
-
-.animate-stagger-8 {
-  animation-delay: 0.8s;
-}
-
-/* Orchestrated reveal */
-.orchestrated-reveal {
-  opacity: 0;
-  animation: fade-up 0.6s ease-out forwards;
-}
-
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ============================================
-   MEASUREMENT / SCIENTIFIC DECORATIONS
-   ============================================ */
-.measurement-line {
-  position: relative;
-}
-
-.measurement-line::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 30px;
-  height: 2px;
-  background: var(--amber-primary);
-  transform: translateY(-50%);
-}
-
-.measurement-line::after {
-  content: '';
-  position: absolute;
-  left: 30px;
-  top: 50%;
-  width: 8px;
-  height: 8px;
-  border: 2px solid var(--amber-primary);
-  border-radius: 50%;
-  transform: translateY(-50%);
-  background: var(--ink-black);
-}
-
-/* Corner brackets */
-.corner-brackets {
-  position: relative;
-}
-
-.corner-brackets::before,
-.corner-brackets::after {
-  content: '';
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border-color: var(--amber-primary);
-  border-style: solid;
-  border-width: 0;
-}
-
-.corner-brackets::before {
-  top: -1px;
-  left: -1px;
-  border-top-width: 2px;
-  border-left-width: 2px;
-}
-
-.corner-brackets::after {
-  bottom: -1px;
-  right: -1px;
-  border-bottom-width: 2px;
-  border-right-width: 2px;
-}
-
-/* ============================================
-   SHIMMER LOADING EFFECT
+   SHIMMER
    ============================================ */
 .shimmer {
   background: linear-gradient(90deg,
-      rgba(255, 184, 0, 0) 0%,
-      rgba(255, 184, 0, 0.1) 50%,
-      rgba(255, 184, 0, 0) 100%);
+    rgba(0, 245, 212, 0) 0%,
+    rgba(0, 245, 212, 0.08) 50%,
+    rgba(0, 245, 212, 0) 100%);
   background-size: 200% 100%;
   animation: shimmer 2s linear infinite;
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-
-  100% {
-    background-position: 200% 0;
-  }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 /* ============================================
-   DIVIDERS - Scientific Style
+   DIVIDERS
    ============================================ */
 .divider-scientific {
   position: relative;
   height: 1px;
   background: linear-gradient(90deg,
-      transparent 0%,
-      rgba(255, 184, 0, 0.3) 20%,
-      rgba(255, 184, 0, 0.5) 50%,
-      rgba(255, 184, 0, 0.3) 80%,
-      transparent 100%);
+    transparent 0%,
+    rgba(0, 245, 212, 0.3) 20%,
+    rgba(0, 245, 212, 0.5) 50%,
+    rgba(0, 245, 212, 0.3) 80%,
+    transparent 100%);
 }
 
 .divider-scientific::before {
@@ -737,8 +474,87 @@ button:focus-visible {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  color: var(--amber-primary);
+  color: var(--cyan-primary);
   font-size: 10px;
-  background: var(--ink-black);
+  background: var(--bg-deep);
   padding: 0 10px;
+}
+
+/* ============================================
+   CINEMATIC FILM GRAIN + VIGNETTE
+   ============================================ */
+.cinematic-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+/* ============================================
+   PETRI DISH — Contact Section BG
+   ============================================ */
+@keyframes colony-grow {
+  0% { transform: scale(0); opacity: 0; }
+  50% { opacity: 0.6; }
+  100% { transform: scale(1); opacity: 0.15; }
+}
+
+.petri-colony {
+  animation: colony-grow 3s ease-out forwards;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--glow-cyan), transparent 70%);
+}
+
+/* ============================================
+   CINEMATIC ENTRY EASING
+   ============================================ */
+.ease-cinematic {
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ease-exit {
+  transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* ============================================
+   prefers-reduced-motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .scanner-ring { animation: none; }
+  .scanline-overlay { display: none; }
+  body::before { animation: none; }
+}
+
+/* ============================================
+   MOBILE FALLBACK GRADIENT
+   ============================================ */
+@media (max-width: 768px) {
+  .three-canvas-wrapper {
+    display: none !important;
+  }
+  .mobile-gradient-fallback {
+    display: block;
+    background: radial-gradient(
+      ellipse at 30% 20%,
+      rgba(0, 245, 212, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 70% 80%,
+      rgba(57, 255, 20, 0.05) 0%,
+      transparent 50%
+    ),
+    var(--bg-deep);
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-gradient-fallback {
+    display: none;
+  }
 }

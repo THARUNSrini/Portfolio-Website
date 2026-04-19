@@ -1,235 +1,106 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import React, { useRef, useState, useEffect } from "react";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import LabScene from "@/components/3d/LabScene";
 import { portfolioData } from "@/lib/data";
-import { Linkedin, Mail, MapPin, ArrowDown, Microscope, Atom, TestTubes } from "lucide-react";
+import { Linkedin, Mail, MapPin } from "lucide-react";
 
-gsap.registerPlugin(ScrollTrigger);
+// Cinematic DrawSVG-style Name Reveal
+function DrawNameReveal({ name }: { name: string }) {
+    const letters = name.split("");
 
-// Animated welcome badge with mono font
-function WelcomeBadge() {
     return (
-        <motion.div
-            initial={{ opacity: 0, y: -30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="mb-8"
-        >
-            <motion.div
-                className="inline-flex items-center gap-3 px-5 py-2.5 bg-surface border-2 border-primary rounded-none"
-                style={{ boxShadow: '3px 3px 0px 0px #FFB800' }}
-                whileHover={{ x: -2, y: -2, boxShadow: '5px 5px 0px 0px #FFB800' }}
-            >
-                <motion.div
-                    animate={{ rotate: [0, 15, -15, 0] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        <motion.h1 className="heading-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl text-white tracking-tight flex flex-wrap justify-center drop-shadow-[0_0_15px_rgba(0,245,212,0.3)]">
+            {letters.map((char, index) => (
+                <motion.span
+                    key={index}
+                    initial={{ opacity: 0, clipPath: 'inset(100% 0 0 0)' }}
+                    animate={{ opacity: 1, clipPath: 'inset(0% 0 0 0)' }}
+                    transition={{
+                        duration: 1.2,
+                        delay: 0.5 + index * 0.05,
+                        ease: [0.16, 1, 0.3, 1] // Easing standard
+                    }}
+                    className={char === " " ? "w-[0.2em]" : "inline-block"}
                 >
-                    <Microscope className="w-4 h-4 text-primary" />
-                </motion.div>
-                <span className="font-mono text-xs uppercase tracking-[0.2em] text-paper-muted">
-                    Biotech × Artificial Intelligence
-                </span>
-                <Atom className="w-4 h-4 text-secondary" />
-            </motion.div>
-        </motion.div>
+                    {char}
+                </motion.span>
+            ))}
+        </motion.h1>
     );
 }
 
-// Typewriter with mono font styling
-function TypewriterText({ text, delay = 0 }: { text: string; delay?: number }) {
-    const [displayText, setDisplayText] = useState("");
-    const [isComplete, setIsComplete] = useState(false);
-    const [showCursor, setShowCursor] = useState(true);
-
-    useEffect(() => {
-        let index = 0;
-        const timer = setTimeout(() => {
-            const intervalId = setInterval(() => {
-                if (index < text.length) {
-                    setDisplayText(text.slice(0, index + 1));
-                    index++;
-                } else {
-                    setIsComplete(true);
-                    clearInterval(intervalId);
-                }
-            }, 50);
-            return () => clearInterval(intervalId);
-        }, delay);
-        return () => clearTimeout(timer);
-    }, [text, delay]);
-
-    useEffect(() => {
-        if (isComplete) {
-            const cursorInterval = setInterval(() => {
-                setShowCursor(prev => !prev);
-            }, 530);
-            return () => clearInterval(cursorInterval);
-        }
-    }, [isComplete]);
-
+// Tagline Tag stagger
+function TaglineReveal({ text }: { text: string }) {
+    const words = text.split(" ");
     return (
-        <span className="font-mono">
-            {displayText}
-            <span
-                className={`text-primary ml-0.5 ${showCursor ? 'opacity-100' : 'opacity-0'}`}
-                style={{ transition: 'opacity 0.1s' }}
-            >
-                _
-            </span>
-        </span>
+        <div className="flex flex-wrap justify-center gap-x-2 gap-y-1">
+            {words.map((word, index) => (
+                <motion.span
+                    key={index}
+                    initial={{ opacity: 0, filter: "blur(10px)" }}
+                    animate={{ opacity: 1, filter: "blur(0px)" }}
+                    transition={{
+                        delay: 1.5 + index * 0.06, // 60ms stagger per word
+                        duration: 0.8,
+                        ease: [0.16, 1, 0.3, 1]
+                    }}
+                    className="font-body text-paper-muted text-base md:text-lg"
+                >
+                    {word}
+                </motion.span>
+            ))}
+        </div>
     );
 }
 
-// Elegant name display with serif font
-function DisplayName({ name }: { name: string }) {
-    const [isHovering, setIsHovering] = useState(false);
-
-    return (
-        <motion.div
-            className="relative inline-block"
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
-        >
-            <motion.h1
-                className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-semibold text-paper-cream tracking-tight"
-                whileHover={{ scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 300 }}
-            >
-                {name.split(' ').map((word, i) => (
-                    <span key={i} className={i === 0 ? 'text-gradient-amber' : ''}>
-                        {word}{' '}
-                    </span>
-                ))}
-            </motion.h1>
-
-            {/* Decorative underline */}
-            <motion.div
-                className="absolute -bottom-4 left-0 h-1 bg-gradient-to-r from-primary via-secondary to-tertiary"
-                initial={{ width: 0 }}
-                animate={{ width: isHovering ? '100%' : '60%' }}
-                transition={{ duration: 0.5 }}
-            />
-        </motion.div>
-    );
-}
-
-// Quote card with brutalist styling
-function QuoteCard() {
-    const quoteRef = useRef<HTMLDivElement>(null);
-    const [isVisible, setIsVisible] = useState(false);
-
-    useEffect(() => {
-        const timer = setTimeout(() => setIsVisible(true), 2000);
-        return () => clearTimeout(timer);
-    }, []);
-
-    return (
-        <motion.div
-            ref={quoteRef}
-            initial={{ opacity: 0, y: 50 }}
-            animate={isVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="mt-16 max-w-3xl mx-auto"
-        >
-            <div className="relative bg-surface border-2 border-primary p-8 md:p-10"
-                style={{ boxShadow: '6px 6px 0px 0px #FFB800' }}
-            >
-                {/* Corner markers */}
-                <div className="absolute top-3 left-3 w-6 h-6 border-t-2 border-l-2 border-secondary" />
-                <div className="absolute bottom-3 right-3 w-6 h-6 border-b-2 border-r-2 border-secondary" />
-
-                {/* Quote */}
-                <div className="relative">
-                    <span className="absolute -top-6 -left-2 text-6xl text-primary/30 font-display">"</span>
-                    <p className="font-display text-xl md:text-2xl text-paper-cream italic leading-relaxed pl-6">
-                        {portfolioData.quote.text}
-                    </p>
-                    <span className="absolute -bottom-8 right-0 text-6xl text-primary/30 font-display">"</span>
-                </div>
-
-                {/* Attribution */}
-                <div className="mt-8 pt-4 border-t border-white/10 flex items-center justify-between">
-                    <div>
-                        <p className="font-mono text-sm text-primary font-medium">
-                            — {portfolioData.quote.author}
-                        </p>
-                        <p className="font-mono text-xs text-paper-muted mt-1">
-                            {portfolioData.quote.context}
-                        </p>
-                    </div>
-                    <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                    >
-                        <TestTubes className="w-8 h-8 text-secondary/50" />
-                    </motion.div>
-                </div>
-            </div>
-        </motion.div>
-    );
-}
-
-// Social link with brutalist hover
+// Social link with frosted glass
 function SocialLink({
     href,
     icon: Icon,
-    label,
-    variant = "primary"
+    label
 }: {
     href: string;
     icon: React.ElementType;
     label: string;
-    variant?: "primary" | "secondary";
 }) {
-    const colors = {
-        primary: {
-            border: "border-primary",
-            shadow: "4px 4px 0px 0px #FFB800",
-            hoverShadow: "6px 6px 0px 0px #FFB800",
-            text: "group-hover:text-primary"
-        },
-        secondary: {
-            border: "border-secondary",
-            shadow: "4px 4px 0px 0px #22C55E",
-            hoverShadow: "6px 6px 0px 0px #22C55E",
-            text: "group-hover:text-secondary"
-        }
-    };
-    const c = colors[variant];
-
     return (
         <motion.a
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className={`group relative flex items-center gap-3 px-5 py-3 bg-surface border-2 ${c.border} transition-all duration-200`}
-            style={{ boxShadow: c.shadow }}
-            whileHover={{ x: -2, y: -2 }}
-            onMouseEnter={(e) => (e.currentTarget.style.boxShadow = c.hoverShadow)}
-            onMouseLeave={(e) => (e.currentTarget.style.boxShadow = c.shadow)}
+            className="group relative flex items-center gap-3 px-5 py-3 glass-panel transition-all duration-300"
+            whileHover={{ y: -2 }}
         >
-            <Icon className={`w-5 h-5 text-paper-muted transition-colors ${c.text}`} />
-            <span className={`font-mono text-sm text-paper-muted transition-colors ${c.text}`}>
+            <Icon className="w-5 h-5 text-paper-muted group-hover:text-primary transition-colors" />
+            <span className="font-mono text-sm text-paper-muted group-hover:text-primary transition-colors">
                 {label}
             </span>
+            <div className="absolute inset-0 rounded-xl rounded-m bg-primary/0 group-hover:bg-primary/5 transition-colors pointer-events-none" />
+            <div className="absolute inset-0 rounded-xl border border-primary/0 group-hover:border-primary/30 transition-colors shadow-[0_0_15px_rgba(0,245,212,0)] group-hover:shadow-[0_0_15px_rgba(0,245,212,0.2)] pointer-events-none" />
         </motion.a>
     );
 }
 
 export default function Hero() {
     const sectionRef = useRef<HTMLElement>(null);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     const { scrollYProgress } = useScroll({
         target: sectionRef,
         offset: ["start start", "end start"]
     });
 
+    // We do NOT use translateY on scroll per user rules, only opacity
     const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-    const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
-    const y = useTransform(scrollYProgress, [0, 0.5], [0, 80]);
 
     return (
         <section
@@ -237,75 +108,76 @@ export default function Hero() {
             id="hero"
             className="relative min-h-screen w-full flex items-center justify-center overflow-hidden py-20"
         >
-            {/* 3D Lab Scene Background */}
-            <LabScene variant="hero" className="z-0" />
+            {/* Mobile Fallback or 3D Scene */}
+            {isMobile ? (
+                <div className="absolute inset-0 z-0 mobile-gradient-fallback w-full h-full" />
+            ) : (
+                <LabScene variant="hero" className="z-0 opacity-80" />
+            )}
 
-            {/* Gradient overlays */}
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background z-[1]" />
-            <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-background/90 z-[1]" />
+            {/* Gradient overlays to blend with the body background */}
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/40 to-background z-[1] pointer-events-none" />
 
             {/* Main content */}
             <motion.div
-                style={{ opacity, scale, y }}
-                className="relative z-10 text-center px-4 max-w-6xl mx-auto"
+                style={{ opacity }}
+                className="relative z-10 text-center px-4 max-w-5xl mx-auto w-full pt-10"
             >
-                {/* Welcome badge */}
-                <WelcomeBadge />
-
-                {/* Name */}
+                {/* Hero Portrait / Scanner Area */}
                 <motion.div
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
-                    className="mb-6"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+                    className="relative w-32 h-32 md:w-40 md:h-40 mx-auto mb-10 flex items-center justify-center"
                 >
-                    <DisplayName name={portfolioData.name} />
+                    <div className="absolute inset-0 scanner-ring" />
+                    {/* Placeholder for portrait photo using frosted glass */}
+                    <div className="w-full h-full rounded-full glass-panel-strong flex items-center justify-center overflow-hidden bg-background/50 border-primary/20 shadow-[0_0_30px_rgba(0,245,212,0.1)]">
+                        <span className="font-display text-4xl text-primary/40 font-light">TS</span>
+                    </div>
                 </motion.div>
 
-                {/* Title with typewriter */}
+                {/* Name */}
+                <div className="mb-4">
+                    <DrawNameReveal name={portfolioData.name} />
+                </div>
+
+                {/* Title */}
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 0.8, duration: 0.8 }}
-                    className="h-12 md:h-16 flex items-center justify-center mb-4"
+                    transition={{ delay: 1.5, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                    className="mb-8"
                 >
-                    <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-primary">
-                        <TypewriterText text={portfolioData.title} delay={1200} />
+                    <h2 className="text-xl md:text-2xl lg:text-3xl font-mono text-primary tracking-widest uppercase">
+                        {portfolioData.title}
                     </h2>
                 </motion.div>
 
                 {/* Tagline */}
-                <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 2, duration: 1 }}
-                    className="text-paper-muted text-base md:text-lg max-w-2xl mx-auto mb-10 font-body"
-                >
-                    {portfolioData.tagline}
-                </motion.p>
+                <div className="mb-12 max-w-3xl mx-auto">
+                    <TaglineReveal text={portfolioData.tagline} />
+                </div>
 
                 {/* Social links */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 2.3, duration: 0.6 }}
+                    transition={{ delay: 2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                     className="flex flex-wrap justify-center items-center gap-4"
                 >
                     <SocialLink
                         href={portfolioData.contact.linkedin}
                         icon={Linkedin}
                         label="LinkedIn"
-                        variant="primary"
                     />
                     <SocialLink
                         href={`mailto:${portfolioData.contact.email}`}
                         icon={Mail}
                         label="Email"
-                        variant="secondary"
                     />
                     <motion.div
-                        className="flex items-center gap-2 px-5 py-3 border-2 border-white/20 bg-surface"
-                        whileHover={{ borderColor: 'rgba(244, 114, 182, 0.5)' }}
+                        className="flex items-center gap-2 px-5 py-3 glass-panel"
                     >
                         <MapPin className="w-5 h-5 text-paper-muted" />
                         <span className="font-mono text-sm text-paper-muted">
@@ -313,37 +185,6 @@ export default function Hero() {
                         </span>
                     </motion.div>
                 </motion.div>
-
-                {/* Quote */}
-                <QuoteCard />
-            </motion.div>
-
-            {/* Scroll indicator */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 3, duration: 1 }}
-                className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10"
-            >
-                <a href="#about" className="block group">
-                    <motion.div
-                        animate={{ y: [0, 8, 0] }}
-                        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                        className="flex flex-col items-center gap-3"
-                    >
-                        <span className="font-mono text-xs text-paper-muted uppercase tracking-[0.2em] group-hover:text-primary transition-colors">
-                            Explore
-                        </span>
-                        <div className="w-10 h-16 border-2 border-white/20 flex items-center justify-center group-hover:border-primary/50 transition-colors">
-                            <motion.div
-                                animate={{ y: [0, 12, 0] }}
-                                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                            >
-                                <ArrowDown className="w-4 h-4 text-primary" />
-                            </motion.div>
-                        </div>
-                    </motion.div>
-                </a>
             </motion.div>
         </section>
     );

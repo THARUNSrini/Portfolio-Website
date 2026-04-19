@@ -14,8 +14,8 @@ interface DNAHelixProps {
 export default function DNAHelix({
     position = [0, 0, 0],
     scale = 1,
-    color1 = "#00e5ff",
-    color2 = "#00ff9f"
+    color1 = "#00f5d4", // Default to cyan
+    color2 = "#39ff14"  // Default to green
 }: DNAHelixProps) {
     const groupRef = useRef<THREE.Group>(null);
 
@@ -57,12 +57,12 @@ export default function DNAHelix({
     // Create tube curves for the strands
     const strand1Geometry = useMemo(() => {
         const curve = new THREE.CatmullRomCurve3(strand1);
-        return new THREE.TubeGeometry(curve, 40, 0.1, 6, false);
+        return new THREE.TubeGeometry(curve, 40, 0.14, 6, false);
     }, [strand1]);
 
     const strand2Geometry = useMemo(() => {
         const curve = new THREE.CatmullRomCurve3(strand2);
-        return new THREE.TubeGeometry(curve, 40, 0.1, 6, false);
+        return new THREE.TubeGeometry(curve, 40, 0.14, 6, false);
     }, [strand2]);
 
     useFrame(() => {
@@ -73,28 +73,25 @@ export default function DNAHelix({
 
     return (
         <group ref={groupRef} position={position} scale={scale} rotation={[0, 0, Math.PI / 8]}>
-            {/* Strand 1 - Teal */}
+            {/* Strand 1 - Cyan */}
             <mesh geometry={strand1Geometry}>
-                <meshBasicMaterial color={color1} transparent opacity={0.8} />
+                <meshStandardMaterial color={color1} emissive={color1} emissiveIntensity={0.6} transparent opacity={0.85} />
             </mesh>
 
             {/* Strand 2 - Green */}
             <mesh geometry={strand2Geometry}>
-                <meshBasicMaterial color={color2} transparent opacity={0.8} />
+                <meshStandardMaterial color={color2} emissive={color2} emissiveIntensity={0.6} transparent opacity={0.85} />
             </mesh>
 
             {/* Base pair connections - simplified */}
             {connections.map((conn, i) => (
-                <ConnectionBeam key={i} start={conn.start} end={conn.end} />
+                <ConnectionBeam key={i} start={conn.start} end={conn.end} color={i % 2 === 0 ? color1 : color2} />
             ))}
-
-            {/* Inner glow */}
-            <pointLight position={[0, 0, 0]} color={color1} intensity={0.8} distance={6} />
         </group>
     );
 }
 
-function ConnectionBeam({ start, end }: { start: THREE.Vector3; end: THREE.Vector3 }) {
+function ConnectionBeam({ start, end, color }: { start: THREE.Vector3; end: THREE.Vector3; color: string }) {
     const { midpoint, length, quaternion } = useMemo(() => {
         const mid = start.clone().add(end).multiplyScalar(0.5);
         const len = start.distanceTo(end);
@@ -108,7 +105,7 @@ function ConnectionBeam({ start, end }: { start: THREE.Vector3; end: THREE.Vecto
     return (
         <mesh position={midpoint} quaternion={quaternion}>
             <cylinderGeometry args={[0.02, 0.02, length, 4]} />
-            <meshBasicMaterial color="#ffffff" transparent opacity={0.4} />
+            <meshBasicMaterial color={color} transparent opacity={0.5} />
         </mesh>
     );
 }

@@ -1,280 +1,183 @@
 "use client";
 
-import React, { useRef, useState } from "react";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import React, { useRef, useEffect } from "react";
+import { motion, useInView } from "framer-motion";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import { portfolioData } from "@/lib/data";
-import { FlaskConical, Cpu, Brain, Atom } from "lucide-react";
+import { Microscope, Code2, BrainCircuit, Quote } from "lucide-react";
+import gsap from "gsap";
 
-// Skill tag with mono styling
-function SkillTag({
+// Oscillating Orb Skill Badge
+function SkillBadge({
     skill,
-    variant,
-    index
+    index,
+    accent = "cyan"
 }: {
     skill: string;
-    variant: "wet_lab" | "computational" | "ai";
     index: number;
+    accent?: "cyan" | "green" | "amber";
 }) {
-    const tagRef = useRef<HTMLDivElement>(null);
-    const isInView = useInView(tagRef, { once: true, margin: "-20px" });
+    const badgeRef = useRef<HTMLDivElement>(null);
+    const orbRef = useRef<HTMLDivElement>(null);
+    
+    // GSAP Ticker for smooth sine wave oscillation
+    useEffect(() => {
+        if (!orbRef.current) return;
+        
+        let phase = index * 0.5; // Offset phase per item
+        const speed = 0.05 + (Math.random() * 0.02);
+        const amplitude = 3 + (Math.random() * 2);
+        
+        const tick = () => {
+            phase += speed;
+            const yOffset = Math.sin(phase) * amplitude;
+            if (orbRef.current) {
+                gsap.set(orbRef.current, { y: yOffset });
+            }
+        };
+        
+        gsap.ticker.add(tick);
+        return () => gsap.ticker.remove(tick);
+    }, [index]);
 
-    const variantStyles = {
-        wet_lab: {
-            border: "border-primary/40 hover:border-primary",
-            text: "text-primary",
-            bg: "hover:bg-primary/5"
-        },
-        computational: {
-            border: "border-secondary/40 hover:border-secondary",
-            text: "text-secondary",
-            bg: "hover:bg-secondary/5"
-        },
-        ai: {
-            border: "border-tertiary/40 hover:border-tertiary",
-            text: "text-tertiary",
-            bg: "hover:bg-tertiary/5"
-        }
+    const borderConfig = {
+        cyan: "border-primary/30 group-hover:border-primary/80 glow-cyan-sm",
+        green: "border-secondary/30 group-hover:border-secondary/80 glow-green-sm",
+        amber: "border-tertiary/30 group-hover:border-tertiary/80 glow-amber-sm",
     };
 
-    const style = variantStyles[variant];
+    const bgConfig = {
+        cyan: "bg-primary text-primary",
+        green: "bg-secondary text-secondary",
+        amber: "bg-tertiary text-tertiary",
+    };
 
     return (
-        <motion.div
-            ref={tagRef}
-            initial={{ opacity: 0, x: -20 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{
-                delay: index * 0.03,
-                duration: 0.4,
-                ease: "easeOut"
-            }}
-            className={`
-                px-4 py-2.5 border ${style.border} ${style.bg}
-                bg-surface transition-all duration-200 cursor-default
-                hover:translate-x-1
-            `}
+        <div 
+            ref={badgeRef}
+            className="group flex flex-col items-center gap-2 p-2 hover:-translate-y-1 transition-transform duration-300"
         >
-            <span className={`font-mono text-sm ${style.text}`}>
+            <div 
+                ref={orbRef}
+                className={`w-10 h-10 rounded-full border glass-panel flex items-center justify-center transition-all duration-300 ${borderConfig[accent]}`}
+            >
+                <div className={`w-1.5 h-1.5 rounded-full shadow-[0_0_10px_currentColor] animate-pulse ${bgConfig[accent]}`} />
+            </div>
+            <span className="font-mono text-[10px] sm:text-xs text-paper-muted text-center leading-tight group-hover:text-white transition-colors">
                 {skill}
             </span>
-        </motion.div>
-    );
-}
-
-// Category section with header
-function SkillCategory({
-    icon: Icon,
-    title,
-    skills,
-    variant,
-    delay = 0
-}: {
-    icon: React.ElementType;
-    title: string;
-    skills: string[];
-    variant: "wet_lab" | "computational" | "ai";
-    delay?: number;
-}) {
-    const categoryRef = useRef<HTMLDivElement>(null);
-    const isInView = useInView(categoryRef, { once: true });
-
-    const colors = {
-        wet_lab: {
-            border: "border-primary",
-            iconBg: "bg-primary/10",
-            iconColor: "text-primary",
-            shadow: "4px 4px 0px 0px #FFB800"
-        },
-        computational: {
-            border: "border-secondary",
-            iconBg: "bg-secondary/10",
-            iconColor: "text-secondary",
-            shadow: "4px 4px 0px 0px #22C55E"
-        },
-        ai: {
-            border: "border-tertiary",
-            iconBg: "bg-tertiary/10",
-            iconColor: "text-tertiary",
-            shadow: "4px 4px 0px 0px #F472B6"
-        }
-    };
-
-    const c = colors[variant];
-
-    return (
-        <motion.div
-            ref={categoryRef}
-            initial={{ opacity: 0, y: 40 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay, duration: 0.6 }}
-            className={`bg-surface border-2 ${c.border} p-6`}
-            style={{ boxShadow: c.shadow }}
-        >
-            {/* Header */}
-            <div className="flex items-center gap-4 mb-6 pb-4 border-b border-white/10">
-                <div className={`w-12 h-12 ${c.iconBg} border border-white/10 flex items-center justify-center`}>
-                    <Icon className={`w-6 h-6 ${c.iconColor}`} />
-                </div>
-                <div>
-                    <h3 className="font-display text-xl font-semibold text-paper-cream">
-                        {title}
-                    </h3>
-                    <span className="font-mono text-xs text-paper-muted">
-                        {skills.length} skills
-                    </span>
-                </div>
-            </div>
-
-            {/* Skills list */}
-            <div className="space-y-2">
-                {skills.map((skill, index) => (
-                    <SkillTag key={skill} skill={skill} variant={variant} index={index} />
-                ))}
-            </div>
-        </motion.div>
-    );
-}
-
-// Quote card
-function CharpentierQuote() {
-    const quoteRef = useRef<HTMLDivElement>(null);
-    const isInView = useInView(quoteRef, { once: true });
-
-    return (
-        <motion.div
-            ref={quoteRef}
-            initial={{ opacity: 0, y: 40 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="relative mt-16"
-        >
-            <div className="bg-surface border-2 border-primary p-8 md:p-12"
-                style={{ boxShadow: '6px 6px 0px 0px #FFB800' }}
-            >
-                {/* Corner decorations */}
-                <div className="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-secondary" />
-                <div className="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-secondary" />
-
-                {/* Floating atom */}
-                <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                    className="absolute -top-8 -right-8 opacity-10"
-                >
-                    <Atom className="w-24 h-24 text-primary" />
-                </motion.div>
-
-                {/* Quote */}
-                <div className="relative max-w-3xl mx-auto text-center">
-                    <span className="absolute -top-4 left-0 text-5xl text-primary/30 font-display">"</span>
-                    <p className="font-display text-xl md:text-2xl text-paper-cream italic leading-relaxed px-8">
-                        {portfolioData.charpentierQuote.text}
-                    </p>
-                    <span className="absolute -bottom-4 right-0 text-5xl text-primary/30 font-display">"</span>
-                </div>
-
-                {/* Attribution */}
-                <div className="mt-8 pt-6 border-t border-white/10 text-center">
-                    <p className="font-mono text-sm text-primary font-medium">
-                        — {portfolioData.charpentierQuote.author}
-                    </p>
-                    <p className="font-mono text-xs text-paper-muted mt-1">
-                        {portfolioData.charpentierQuote.context}
-                    </p>
-                </div>
-            </div>
-        </motion.div>
-    );
-}
-
-// Stats row
-function SkillStats() {
-    const stats = [
-        { value: portfolioData.skills.wet_lab.length, label: "Lab Techniques", color: "text-primary" },
-        { value: portfolioData.skills.ai.length, label: "AI/ML Tools", color: "text-tertiary" },
-        { value: portfolioData.skills.computational.length, label: "Computational", color: "text-secondary" }
-    ];
-
-    return (
-        <div className="grid grid-cols-3 gap-4 mb-12">
-            {stats.map((stat, index) => (
-                <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1, duration: 0.5 }}
-                    className="bg-surface border border-white/10 p-6 text-center hover:border-primary/30 transition-colors"
-                >
-                    <span className={`font-display text-4xl font-bold ${stat.color}`}>
-                        {stat.value}+
-                    </span>
-                    <p className="font-mono text-xs text-paper-muted mt-2 uppercase tracking-wider">
-                        {stat.label}
-                    </p>
-                </motion.div>
-            ))}
         </div>
     );
 }
 
-export default function Skills() {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start end", "end start"]
-    });
+// Category Glass Panel
+function SkillCategory({
+    title,
+    skills,
+    icon: Icon,
+    index,
+    accent = "cyan"
+}: {
+    title: string;
+    skills: string[];
+    icon: React.ElementType;
+    index: number;
+    accent?: "cyan" | "green" | "amber";
+}) {
+    const categoryRef = useRef<HTMLDivElement>(null);
+    const isInView = useInView(categoryRef, { once: true, margin: "-50px" });
 
-    const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+    return (
+        <motion.div
+            ref={categoryRef}
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: index * 0.15, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="flex-1 w-full"
+        >
+             <div className="glass-panel p-6 sm:p-8 h-full relative overflow-hidden group hover:border-primary/30 transition-colors duration-500">
+                {/* Decorative background icon */}
+                <Icon className="absolute -right-6 -bottom-6 w-32 h-32 text-white/5 pointer-events-none group-hover:text-primary/5 transition-colors duration-500" />
+                
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-8 relative z-10 border-b border-white/5 pb-6">
+                    <div className="w-12 h-12 rounded-lg border border-primary/20 flex items-center justify-center bg-primary/10 flex-shrink-0">
+                        <Icon className="w-6 h-6 text-primary" />
+                    </div>
+                    <h3 className="font-display text-2xl text-white font-medium">{title}</h3>
+                </div>
+
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 relative z-10">
+                    {skills.map((skill, i) => (
+                        <SkillBadge key={i} skill={skill} index={i} accent={accent} />
+                    ))}
+                </div>
+            </div>
+        </motion.div>
+    );
+}
+
+export default function Skills() {
+    const quoteRef = useRef<HTMLDivElement>(null);
+    const isQuoteInView = useInView(quoteRef, { once: true, margin: "-50px" });
 
     return (
         <SectionWrapper
             id="skills"
-            title="Skills & Expertise"
-            subtitle="Bridging wet-lab biology with AI-driven computational approaches"
+            title="Skills & Toolkit"
+            subtitle="Bridging wet-lab precision with computational biology and AI"
         >
-            <div ref={containerRef} className="relative">
-                {/* Stats */}
-                <SkillStats />
-
-                {/* Skills Grid */}
-                <div className="grid lg:grid-cols-3 gap-6">
-                    <SkillCategory
-                        icon={FlaskConical}
-                        title="Laboratory Techniques"
-                        skills={portfolioData.skills.wet_lab}
-                        variant="wet_lab"
-                        delay={0}
-                    />
-                    <SkillCategory
-                        icon={Brain}
-                        title="AI & Machine Learning"
-                        skills={portfolioData.skills.ai}
-                        variant="ai"
-                        delay={0.15}
-                    />
-                    <SkillCategory
-                        icon={Cpu}
-                        title="Computational & Analytical"
-                        skills={portfolioData.skills.computational}
-                        variant="computational"
-                        delay={0.3}
-                    />
-                </div>
-
-                {/* Charpentier Quote */}
-                <CharpentierQuote />
-
-                {/* Bottom decorative line */}
-                <motion.div
-                    initial={{ scaleX: 0 }}
-                    whileInView={{ scaleX: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1, delay: 0.5 }}
-                    className="mt-16 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent"
+            <div className="flex flex-col lg:flex-row gap-6 mb-16 relative z-10">
+                <SkillCategory
+                    title="Wet-Lab & Genomics"
+                    skills={portfolioData.skills.wet_lab}
+                    icon={Microscope}
+                    index={0}
+                    accent="cyan"
+                />
+                <SkillCategory
+                    title="Computational Bio"
+                    skills={portfolioData.skills.computational}
+                    icon={Code2}
+                    index={1}
+                    accent="green"
+                />
+                <SkillCategory
+                    title="AI & Modeling"
+                    skills={portfolioData.skills.ai}
+                    icon={BrainCircuit}
+                    index={2}
+                    accent="cyan"
                 />
             </div>
+
+            {/* Quote Card */}
+            <motion.div
+                ref={quoteRef}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={isQuoteInView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="max-w-3xl mx-auto"
+            >
+                <div className="relative glass-panel-strong p-8 md:p-10 border-tertiary/20 text-center overflow-hidden">
+                    {/* Background glow */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-tertiary/5 rounded-full blur-[50px] pointer-events-none" />
+
+                    <Quote className="w-12 h-12 text-tertiary/30 mx-auto mb-6" />
+                    
+                    <p className="font-display text-xl md:text-2xl text-paper-cream italic leading-relaxed mb-6 block relative z-10">
+                        {portfolioData.charpentierQuote.text}
+                    </p>
+                    
+                    <div className="relative z-10">
+                        <p className="font-mono text-sm text-tertiary font-medium">
+                            — {portfolioData.charpentierQuote.author}
+                        </p>
+                        <p className="font-mono text-xs text-paper-muted mt-1">
+                            {portfolioData.charpentierQuote.context}
+                        </p>
+                    </div>
+                </div>
+            </motion.div>
         </SectionWrapper>
     );
 }

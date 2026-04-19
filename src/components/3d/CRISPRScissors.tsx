@@ -109,14 +109,14 @@ export default function CRISPRScissors({
                         color="#4a5568"
                         metalness={0.9}
                         roughness={0.1}
-                        emissive="#00e5ff"
+                        emissive="#FFB800"
                         emissiveIntensity={0.1}
                     />
                 </mesh>
                 {/* Cutting edge glow */}
                 <mesh position={[1.5, 0, 0.05]}>
                     <boxGeometry args={[1.5, 0.02, 0.02]} />
-                    <meshBasicMaterial color="#00e5ff" transparent opacity={0.8} />
+                    <meshBasicMaterial color="#FFB800" transparent opacity={0.8} />
                 </mesh>
                 {/* Handle */}
                 <mesh geometry={handleGeometry} position={[-0.4, 0, 0.05]} rotation={[Math.PI / 2, 0, 0]}>
@@ -131,14 +131,14 @@ export default function CRISPRScissors({
                         color="#4a5568"
                         metalness={0.9}
                         roughness={0.1}
-                        emissive="#00ff9f"
+                        emissive="#22C55E"
                         emissiveIntensity={0.1}
                     />
                 </mesh>
                 {/* Cutting edge glow */}
                 <mesh position={[1.5, 0, 0.05]}>
                     <boxGeometry args={[1.5, 0.02, 0.02]} />
-                    <meshBasicMaterial color="#00ff9f" transparent opacity={0.8} />
+                    <meshBasicMaterial color="#22C55E" transparent opacity={0.8} />
                 </mesh>
                 {/* Handle */}
                 <mesh geometry={handleGeometry} position={[-0.4, 0, 0.05]} rotation={[Math.PI / 2, 0, 0]}>
@@ -168,7 +168,7 @@ export default function CRISPRScissors({
                     </bufferGeometry>
                     <pointsMaterial
                         size={0.05}
-                        color="#00e5ff"
+                        color="#FFB800"
                         transparent
                         opacity={0.8}
                         blending={THREE.AdditiveBlending}
@@ -177,7 +177,7 @@ export default function CRISPRScissors({
             )}
 
             {/* Glow light */}
-            <pointLight position={[1.5, 0, 0]} color="#00e5ff" intensity={1} distance={3} />
+            <pointLight position={[1.5, 0, 0]} color="#FFB800" intensity={1} distance={3} />
         </group>
     );
 }
@@ -203,12 +203,12 @@ function DNAStrandFragment({ position }: { position: [number, number, number] })
                         {/* Strand 1 */}
                         <mesh position={[Math.cos(angle) * 0.3, y, Math.sin(angle) * 0.3]}>
                             <sphereGeometry args={[0.06, 8, 8]} />
-                            <meshBasicMaterial color="#00e5ff" transparent opacity={0.8} />
+                            <meshBasicMaterial color="#FFB800" transparent opacity={0.8} />
                         </mesh>
                         {/* Strand 2 */}
                         <mesh position={[Math.cos(angle + Math.PI) * 0.3, y, Math.sin(angle + Math.PI) * 0.3]}>
                             <sphereGeometry args={[0.06, 8, 8]} />
-                            <meshBasicMaterial color="#00ff9f" transparent opacity={0.8} />
+                            <meshBasicMaterial color="#22C55E" transparent opacity={0.8} />
                         </mesh>
                     </group>
                 );

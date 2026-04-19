@@ -104,7 +104,7 @@ export default function NeuralNetwork({
             </group>
 
             {/* Central glow */}
-            <pointLight position={[0, 0, 0]} color="#00e5ff" intensity={1} distance={6} />
+            <pointLight position={[0, 0, 0]} color="#FFB800" intensity={1} distance={6} />
         </group>
     );
 }
@@ -132,7 +132,7 @@ function NeuralNode({
         }
     });
 
-    const color = layer % 2 === 0 ? "#00e5ff" : "#00ff9f";
+    const color = layer % 2 === 0 ? "#FFB800" : "#22C55E";
 
     return (
         <group position={position}>
@@ -165,7 +165,7 @@ function SynapseConnection({
     const { lineObject } = useMemo(() => {
         const geometry = new THREE.BufferGeometry().setFromPoints([from, to]);
         const material = new THREE.LineBasicMaterial({
-            color: "#00e5ff",
+            color: "#FFB800",
             transparent: true,
             opacity: 0.4,
             blending: THREE.AdditiveBlending
@@ -198,7 +198,7 @@ function SynapseConnection({
             {/* Traveling pulse */}
             <mesh ref={pulseRef}>
                 <sphereGeometry args={[0.04, 8, 8]} />
-                <meshBasicMaterial color="#00ff9f" />
+                <meshBasicMaterial color="#22C55E" />
             </mesh>
         </>
     );

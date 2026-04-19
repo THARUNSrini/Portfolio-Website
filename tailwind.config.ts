@@ -9,130 +9,88 @@ const config: Config = {
     theme: {
         extend: {
             colors: {
-                // NEW: "Lab Precision" palette - sophisticated & distinctive
-                background: "#0D0D0D",      // Deep obsidian ink
-                surface: "#161616",          // Elevated surface
-                "surface-elevated": "#1F1F1F", // Cards and modals
+                // Cinematic Bioluminescent Lab palette
+                background: "#050d1a",
+                surface: "#0a192f",
+                "surface-elevated": "#0f233c",
 
-                // Primary accent - Acid Amber (chemical indicator inspired)
-                primary: "#FFB800",
-                "primary-light": "#FFCC33",
-                "primary-dark": "#CC9200",
+                // Primary — Bioluminescent Cyan
+                primary: "#00f5d4",
+                "primary-light": "#72fce8",
+                "primary-dark": "#00c4a7",
 
-                // Secondary - Specimen Green (vivid chlorophyll)
-                secondary: "#22C55E",
-                "secondary-light": "#4ADE80",
-                "secondary-dark": "#16A34A",
+                // Secondary — Neon Green (lab glow)
+                secondary: "#39ff14",
+                "secondary-light": "#7aff5a",
+                "secondary-dark": "#2acc10",
 
-                // Tertiary - Reagent Rose (unexpected accent)
-                tertiary: "#F472B6",
-                "tertiary-light": "#F9A8D4",
-                "tertiary-dark": "#DB2777",
+                // Tertiary — Warm Amber (CTAs only)
+                tertiary: "#FFB800",
+                "tertiary-light": "#FFCC33",
+                "tertiary-dark": "#CC9200",
 
-                // Utility - Graph Blue (data visualization)
+                // Accent
+                accent: "#F472B6",
+
+                // Graph blue
                 graphBlue: "#3B82F6",
 
-                // Text colors
-                "paper-cream": "#F5F2EB",
-                "paper-muted": "#A8A29E",
-
-                // Legacy support (mapped to new palette)
-                navy: {
-                    50: "#fafafa",
-                    100: "#f5f5f5",
-                    200: "#e5e5e5",
-                    300: "#d4d4d4",
-                    400: "#a3a3a3",
-                    500: "#737373",
-                    600: "#525252",
-                    700: "#404040",
-                    800: "#262626",
-                    900: "#171717",
-                },
-                teal: {
-                    300: "#FFCC33",
-                    400: "#FFB800",
-                    500: "#F59E0B",
-                    600: "#D97706",
-                },
-                biogreen: {
-                    300: "#4ADE80",
-                    400: "#22C55E",
-                    500: "#16A34A",
-                    600: "#15803D",
-                },
+                // Text
+                "paper-cream": "#e0f7fa",
+                "paper-muted": "#7aa2b3",
+                "paper-dim": "#4a6a7a",
             },
             backgroundImage: {
                 "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
                 "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-                "gradient-primary": "linear-gradient(135deg, #FFB800 0%, #F59E0B 100%)",
-                "gradient-secondary": "linear-gradient(135deg, #22C55E 0%, #16A34A 100%)",
-                "gradient-accent": "linear-gradient(135deg, #FFB800 0%, #22C55E 50%, #3B82F6 100%)",
+                "gradient-primary": "linear-gradient(135deg, #00f5d4 0%, #00c4a7 100%)",
+                "gradient-secondary": "linear-gradient(135deg, #39ff14 0%, #2acc10 100%)",
+                "gradient-accent": "linear-gradient(135deg, #00f5d4 0%, #39ff14 50%, #3B82F6 100%)",
                 "gradient-warm": "linear-gradient(135deg, #FFB800 0%, #F472B6 100%)",
-                // Paper texture gradient
-                "paper-gradient": "linear-gradient(180deg, rgba(245,242,235,0.02) 0%, rgba(13,13,13,0) 100%)",
             },
             fontFamily: {
-                display: ['var(--font-display)', 'Cormorant Garamond', 'Georgia', 'serif'],
-                body: ['var(--font-body)', 'Outfit', 'system-ui', 'sans-serif'],
-                mono: ['var(--font-mono)', 'IBM Plex Mono', 'monospace'],
+                display: ["'Clash Display'", 'system-ui', 'sans-serif'],
+                body: ["'Satoshi'", 'system-ui', 'sans-serif'],
+                mono: ["'JetBrains Mono'", "'Fira Code'", 'monospace'],
             },
             animation: {
                 "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-                "glow": "glow 2s ease-in-out infinite alternate",
+                "glow": "glow-cyan 2s ease-in-out infinite alternate",
                 "float": "float 6s ease-in-out infinite",
-                "glow-amber": "glow-amber 2s ease-in-out infinite alternate",
+                "glow-cyan": "glow-cyan 2s ease-in-out infinite alternate",
                 "glow-green": "glow-green 2s ease-in-out infinite alternate",
-                "protein-fold": "protein-fold 8s ease-in-out infinite",
+                "glow-amber": "glow-amber 2s ease-in-out infinite alternate",
                 "dna-rotate": "dna-rotate 20s linear infinite",
-                "particle-float": "particle-float 4s ease-in-out infinite",
-                "typewriter": "typewriter 2s steps(40, end)",
-                "blink": "blink 0.75s step-end infinite",
+                "scanner": "scanner-ring 6s linear infinite",
+                "scanline": "scanline-sweep 1s ease-in-out",
+                "hex-breathe": "hex-breathe 8s ease-in-out infinite",
                 "shimmer": "shimmer 2s linear infinite",
-                "fade-up": "fade-up 0.6s ease-out forwards",
+                "fade-up": "fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards",
                 "fade-in": "fade-in 0.4s ease-out forwards",
-                "scale-in": "scale-in 0.5s ease-out forwards",
-                "slide-in-left": "slide-in-left 0.5s ease-out forwards",
-                "slide-in-right": "slide-in-right 0.5s ease-out forwards",
+                "scale-in": "scale-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+                "slide-in-left": "slide-in-left 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+                "slide-in-right": "slide-in-right 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards",
             },
             keyframes: {
-                glow: {
-                    "0%": { boxShadow: "0 0 5px rgba(255, 184, 0, 0.5), 0 0 10px rgba(255, 184, 0, 0.3)" },
-                    "100%": { boxShadow: "0 0 20px rgba(255, 184, 0, 0.8), 0 0 30px rgba(255, 184, 0, 0.5)" },
-                },
-                "glow-amber": {
-                    "0%": { boxShadow: "0 0 5px rgba(255, 184, 0, 0.5), 0 0 10px rgba(255, 184, 0, 0.3)" },
-                    "100%": { boxShadow: "0 0 25px rgba(255, 184, 0, 0.9), 0 0 40px rgba(255, 184, 0, 0.6)" },
+                "glow-cyan": {
+                    "0%": { boxShadow: "0 0 5px rgba(0,245,212,0.5), 0 0 10px rgba(0,245,212,0.3)" },
+                    "100%": { boxShadow: "0 0 25px rgba(0,245,212,0.8), 0 0 40px rgba(0,245,212,0.4)" },
                 },
                 "glow-green": {
-                    "0%": { boxShadow: "0 0 5px rgba(34, 197, 94, 0.5), 0 0 10px rgba(34, 197, 94, 0.3)" },
-                    "100%": { boxShadow: "0 0 25px rgba(34, 197, 94, 0.9), 0 0 40px rgba(34, 197, 94, 0.6)" },
+                    "0%": { boxShadow: "0 0 5px rgba(57,255,20,0.5), 0 0 10px rgba(57,255,20,0.3)" },
+                    "100%": { boxShadow: "0 0 25px rgba(57,255,20,0.8), 0 0 40px rgba(57,255,20,0.4)" },
+                },
+                "glow-amber": {
+                    "0%": { boxShadow: "0 0 5px rgba(255,184,0,0.5), 0 0 10px rgba(255,184,0,0.3)" },
+                    "100%": { boxShadow: "0 0 25px rgba(255,184,0,0.8), 0 0 40px rgba(255,184,0,0.4)" },
                 },
                 float: {
                     "0%, 100%": { transform: "translateY(0px)" },
                     "50%": { transform: "translateY(-20px)" },
                 },
-                "protein-fold": {
-                    "0%, 100%": { transform: "rotateY(0deg) rotateX(0deg)" },
-                    "25%": { transform: "rotateY(90deg) rotateX(10deg)" },
-                    "50%": { transform: "rotateY(180deg) rotateX(0deg)" },
-                    "75%": { transform: "rotateY(270deg) rotateX(-10deg)" },
-                },
                 "dna-rotate": {
                     "0%": { transform: "rotateY(0deg)" },
                     "100%": { transform: "rotateY(360deg)" },
-                },
-                "particle-float": {
-                    "0%, 100%": { transform: "translateY(0) translateX(0)", opacity: "1" },
-                    "50%": { transform: "translateY(-30px) translateX(10px)", opacity: "0.7" },
-                },
-                typewriter: {
-                    "from": { width: "0" },
-                    "to": { width: "100%" },
-                },
-                blink: {
-                    "from, to": { borderColor: "transparent" },
-                    "50%": { borderColor: "#FFB800" },
                 },
                 shimmer: {
                     "0%": { backgroundPosition: "-200% 0" },
@@ -163,15 +121,15 @@ const config: Config = {
                 xs: "2px",
             },
             borderRadius: {
-                'brutal': '2px',
+                'glass': '12px',
             },
             boxShadow: {
-                'brutal': '4px 4px 0px 0px rgba(255, 184, 0, 1)',
-                'brutal-sm': '2px 2px 0px 0px rgba(255, 184, 0, 1)',
-                'brutal-green': '4px 4px 0px 0px rgba(34, 197, 94, 1)',
-                'elevated': '0 8px 32px rgba(0, 0, 0, 0.4)',
+                'glow-cyan': '0 0 30px rgba(0, 245, 212, 0.3)',
+                'glow-cyan-sm': '0 0 15px rgba(0, 245, 212, 0.2)',
+                'glow-green': '0 0 30px rgba(57, 255, 20, 0.3)',
                 'glow-amber': '0 0 30px rgba(255, 184, 0, 0.3)',
-                'glow-green': '0 0 30px rgba(34, 197, 94, 0.3)',
+                'elevated': '0 8px 32px rgba(0, 0, 0, 0.5)',
+                'glass': '0 4px 30px rgba(0, 0, 0, 0.3)',
             },
         },
     },

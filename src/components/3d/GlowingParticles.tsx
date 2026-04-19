@@ -7,24 +7,22 @@ import * as THREE from "three";
 interface GlowingParticlesProps {
     count?: number;
     radius?: number;
-    color?: string;
-    secondaryColor?: string;
+    colors?: string[];
 }
 
 export default function GlowingParticles({
     count = 100,
     radius = 10,
-    color = "#00e5ff",
-    secondaryColor = "#00ff9f"
+    // Default to the new cyan/green bioluminescent palette
+    colors = ["#00f5d4", "#39ff14", "#72fce8"]
 }: GlowingParticlesProps) {
     const pointsRef = useRef<THREE.Points>(null);
 
-    const { positions, colors } = useMemo(() => {
+    const { positions, colorArray } = useMemo(() => {
         const positions = new Float32Array(count * 3);
-        const colors = new Float32Array(count * 3);
+        const colorArray = new Float32Array(count * 3);
 
-        const colorA = new THREE.Color(color);
-        const colorB = new THREE.Color(secondaryColor);
+        const threeColors = colors.map(c => new THREE.Color(c));
 
         for (let i = 0; i < count; i++) {
             // Spherical distribution
@@ -36,20 +34,23 @@ export default function GlowingParticles({
             positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
             positions[i * 3 + 2] = r * Math.cos(phi);
 
-            // Gradient between teal and green
-            const t = Math.random();
-            const particleColor = colorA.clone().lerp(colorB, t);
-            colors[i * 3] = particleColor.r;
-            colors[i * 3 + 1] = particleColor.g;
-            colors[i * 3 + 2] = particleColor.b;
+            // Assign random color from palette
+            const particleColor = threeColors[Math.floor(Math.random() * threeColors.length)];
+            
+            colorArray[i * 3] = particleColor.r;
+            colorArray[i * 3 + 1] = particleColor.g;
+            colorArray[i * 3 + 2] = particleColor.b;
         }
 
-        return { positions, colors };
-    }, [count, radius, color, secondaryColor]);
+        return { positions, colorArray };
+    }, [count, radius, colors]);
 
     useFrame((state) => {
         if (pointsRef.current) {
             pointsRef.current.rotation.y += 0.0003;
+            // Twinkling size oscillation
+            const material = pointsRef.current.material as THREE.PointsMaterial;
+            material.size = 0.1 + Math.sin(state.clock.elapsedTime * 0.5) * 0.02;
         }
     });
 
@@ -65,15 +66,15 @@ export default function GlowingParticles({
                 <bufferAttribute
                     attach="attributes-color"
                     count={count}
-                    array={colors}
+                    array={colorArray}
                     itemSize={3}
                 />
             </bufferGeometry>
             <pointsMaterial
-                size={0.08}
+                size={0.1}
                 vertexColors
                 transparent
-                opacity={0.7}
+                opacity={0.6}
                 sizeAttenuation
                 blending={THREE.AdditiveBlending}
                 depthWrite={false}
@@ -82,13 +83,13 @@ export default function GlowingParticles({
     );
 }
 
-// Simplified nucleotide particles
+// Simplified nucleotide particles (Updated colors)
 export function NucleotideParticles({ count = 15, radius = 6 }: { count?: number; radius?: number }) {
     const groupRef = useRef<THREE.Group>(null);
 
     const particles = useMemo(() => {
         const items = [];
-        const colors = ['#00e5ff', '#00ff9f', '#00b8d4', '#00c853'];
+        const pallete = ['#00f5d4', '#39ff14', '#00c4a7'];
 
         for (let i = 0; i < count; i++) {
             const theta = Math.random() * Math.PI * 2;
@@ -101,7 +102,7 @@ export function NucleotideParticles({ count = 15, radius = 6 }: { count?: number
                     r * Math.sin(phi) * Math.sin(theta),
                     r * Math.cos(phi)
                 ] as [number, number, number],
-                color: colors[i % 4],
+                color: pallete[i % 3],
             });
         }
 
@@ -118,8 +119,8 @@ export function NucleotideParticles({ count = 15, radius = 6 }: { count?: number
         <group ref={groupRef}>
             {particles.map((particle, i) => (
                 <mesh key={i} position={particle.position}>
-                    <sphereGeometry args={[0.1, 6, 6]} />
-                    <meshBasicMaterial color={particle.color} transparent opacity={0.7} />
+                    <sphereGeometry args={[0.08, 6, 6]} />
+                    <meshBasicMaterial color={particle.color} transparent opacity={0.6} />
                 </mesh>
             ))}
         </group>

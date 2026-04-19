@@ -8,12 +8,14 @@ interface ProteinRibbonProps {
     position?: [number, number, number];
     scale?: number;
     speed?: number;
+    color?: string; // Added color prop
 }
 
 export default function ProteinRibbon({
     position = [0, 0, 0],
     scale = 1,
-    speed = 1
+    speed = 1,
+    color = "#00f5d4" // Default to cyan
 }: ProteinRibbonProps) {
     const groupRef = useRef<THREE.Group>(null);
 
@@ -60,38 +62,39 @@ export default function ProteinRibbon({
 
     return (
         <group ref={groupRef} position={position} scale={scale}>
-            {/* Main protein ribbon with gradient-like effect */}
+            {/* Main protein ribbon with glow effect */}
             <mesh geometry={tubeGeometry}>
-                <meshBasicMaterial
-                    color="#00e5ff"
+                <meshStandardMaterial
+                    color={color}
+                    emissive={color}
+                    emissiveIntensity={0.6}
                     transparent
                     opacity={0.85}
                 />
             </mesh>
 
-            {/* Secondary strand for gradient effect */}
+            {/* Secondary strand for gradient/holographic effect */}
             <mesh geometry={tubeGeometry} scale={0.9}>
-                <meshBasicMaterial
-                    color="#00ff9f"
+                <meshStandardMaterial
+                    color="#00c4a7"
+                    emissive="#00c4a7"
+                    emissiveIntensity={0.3}
                     transparent
                     opacity={0.4}
                 />
             </mesh>
 
-            {/* Fewer glowing particles */}
+            {/* Glowing particles */}
             {particlePositions.map((pos, i) => (
                 <mesh key={i} position={pos}>
                     <sphereGeometry args={[0.06, 6, 6]} />
                     <meshBasicMaterial
-                        color={i % 2 === 0 ? "#00e5ff" : "#00ff9f"}
+                        color={i % 2 === 0 ? color : "#39ff14"}
                         transparent
                         opacity={0.6}
                     />
                 </mesh>
             ))}
-
-            {/* Core glow - reduced intensity */}
-            <pointLight position={[0, 0, 0]} color="#00e5ff" intensity={1} distance={4} />
         </group>
     );
 }

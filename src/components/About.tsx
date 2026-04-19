@@ -4,75 +4,74 @@ import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import { portfolioData } from "@/lib/data";
-import { Target, Zap, Atom, FlaskConical } from "lucide-react";
+import { Target, Zap, FlaskConical, Microscope } from "lucide-react";
 
-// Highlight Card with brutalist styling
+// Highlight Card with Frosted Glass
 function HighlightCard({
     icon: Icon,
     title,
     description,
-    variant = "primary",
-    delay = 0
+    delay = 0,
+    accent = "cyan"
 }: {
     icon: React.ElementType;
     title: string;
     description: string;
-    variant?: "primary" | "secondary";
     delay?: number;
+    accent?: "cyan" | "green";
 }) {
     const cardRef = useRef<HTMLDivElement>(null);
-    const isInView = useInView(cardRef, { once: true });
-
-    const colors = {
-        primary: {
-            border: "border-primary",
-            shadow: "4px 4px 0px 0px #FFB800",
-            hoverShadow: "6px 6px 0px 0px #FFB800",
-            iconBg: "bg-primary/10 border-primary/30",
-            iconColor: "text-primary"
-        },
-        secondary: {
-            border: "border-secondary",
-            shadow: "4px 4px 0px 0px #22C55E",
-            hoverShadow: "6px 6px 0px 0px #22C55E",
-            iconBg: "bg-secondary/10 border-secondary/30",
-            iconColor: "text-secondary"
-        }
-    };
-
-    const c = colors[variant];
+    const isInView = useInView(cardRef, { once: true, margin: "-50px" });
 
     return (
         <motion.div
             ref={cardRef}
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }} // Kept translateY on section entry, but NOT on scroll progress
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay, duration: 0.6 }}
-            className={`relative bg-surface border-2 ${c.border} p-6 transition-all duration-200 group cursor-default`}
-            style={{ boxShadow: c.shadow }}
-            whileHover={{ x: -2, y: -2 }}
-            onMouseEnter={(e) => (e.currentTarget.style.boxShadow = c.hoverShadow)}
-            onMouseLeave={(e) => (e.currentTarget.style.boxShadow = c.shadow)}
+            transition={{ delay, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="group glass-panel-glow p-6 h-full cursor-default"
         >
-            <div className="flex items-start gap-4">
-                <div className={`w-12 h-12 ${c.iconBg} border flex items-center justify-center flex-shrink-0`}>
-                    <Icon className={`w-6 h-6 ${c.iconColor}`} />
+            <div className="flex items-start gap-4 relative z-10">
+                <div className={`w-12 h-12 flex items-center justify-center rounded-lg border flex-shrink-0 transition-colors ${
+                    accent === "cyan" 
+                        ? "bg-primary/5 border-primary/20 group-hover:border-primary/50 group-hover:shadow-[0_0_15px_rgba(0,245,212,0.2)]" 
+                        : "bg-secondary/5 border-secondary/20 group-hover:border-secondary/50 group-hover:shadow-[0_0_15px_rgba(57,255,20,0.2)]"
+                }`}>
+                    <Icon className={`w-6 h-6 transition-colors ${
+                        accent === "cyan" ? "text-primary" : "text-secondary"
+                    }`} />
                 </div>
                 <div>
-                    <h4 className="font-display text-xl font-semibold text-paper-cream mb-2">
+                    <h4 className="font-display text-xl font-medium text-white mb-2 tracking-wide">
                         {title}
                     </h4>
-                    <p className="text-paper-muted text-sm font-body leading-relaxed">
+                    <p className="text-paper-muted text-sm font-body leading-relaxed group-hover:text-white transition-colors duration-300">
                         {description}
                     </p>
                 </div>
             </div>
-
-            {/* Corner accent */}
-            <div className="absolute top-0 right-0 w-8 h-8">
-                <div className={`absolute top-2 right-2 w-4 h-4 border-t border-r ${c.border} opacity-50`} />
-            </div>
+            
+            {/* Scanline Sweep internal to the card */}
+            <div className="scanline-overlay" />
         </motion.div>
+    );
+}
+
+// Cinematic Clip-Path Text Reveal
+function CinematicText({ text }: { text: string }) {
+    const ref = useRef<HTMLDivElement>(null);
+    const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+    return (
+        <div ref={ref} className="font-body text-lg md:text-xl text-paper-cream leading-relaxed font-light">
+           <motion.div
+                initial={{ clipPath: 'inset(100% 0 0 0)' }}
+                animate={isInView ? { clipPath: 'inset(0% 0 0 0)' } : {}}
+                transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+            >
+                {text}
+            </motion.div>
+        </div>
     );
 }
 
@@ -84,81 +83,83 @@ export default function About() {
         <SectionWrapper
             id="about"
             title="About Me"
-            subtitle="Where wet-lab meets machine learning"
+            subtitle="Where single-cell genomics meets computational immunology"
         >
-            <div ref={contentRef} className="relative">
-                {/* Floating decorative elements */}
+            <div ref={contentRef} className="relative z-10 w-full max-w-5xl mx-auto">
+                {/* Main content glass panel */}
                 <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={isInView ? { opacity: 0.1 } : {}}
-                    className="absolute -top-10 -right-10 pointer-events-none"
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                    transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                    className="relative glass-panel-strong p-8 md:p-12 mb-8 overflow-hidden"
                 >
-                    <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                    >
-                        <Atom className="w-32 h-32 text-primary" />
-                    </motion.div>
-                </motion.div>
+                    {/* Background SVG Grid Pattern inside the panel */}
+                    <div className="absolute inset-0 opacity-10 pointer-events-none" style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0l20 10v20L20 40 0 30V10z' fill-rule='evenodd' stroke='%2300f5d4' stroke-width='1' fill='none'/%3E%3C/svg%3E")`,
+                        backgroundSize: '40px 40px'
+                    }} />
 
-                {/* Main content card */}
-                <motion.div
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.8 }}
-                    className="relative bg-surface border-2 border-white/10 p-8 md:p-12 mb-8"
-                >
-                    {/* Corner brackets */}
-                    <div className="absolute top-4 left-4 w-8 h-8 border-t-2 border-l-2 border-primary" />
-                    <div className="absolute bottom-4 right-4 w-8 h-8 border-b-2 border-r-2 border-secondary" />
-
-                    {/* Summary text */}
-                    <motion.p
+                    {/* Animated Microscope SVG (Draw SVG simulation) */}
+                    <motion.div 
                         initial={{ opacity: 0 }}
-                        animate={isInView ? { opacity: 1 } : {}}
-                        transition={{ delay: 0.3, duration: 0.8 }}
-                        className="font-body text-lg md:text-xl text-paper-cream leading-relaxed"
+                        animate={isInView ? { opacity: 0.05 } : {}}
+                        transition={{ delay: 0.5, duration: 1 }}
+                        className="absolute -right-10 -bottom-10 pointer-events-none"
                     >
-                        {portfolioData.summary}
-                    </motion.p>
+                         <svg width="200" height="200" viewBox="0 0 24 24" fill="none" stroke="#00f5d4" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round">
+                            <motion.path 
+                                initial={{ pathLength: 0 }}
+                                animate={isInView ? { pathLength: 1 } : {}}
+                                transition={{ duration: 3, ease: "easeInOut" }}
+                                d="M6 18h8M3 22h18M14 22a7 7 0 1 0 0-14h-1M9 14h2M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z" 
+                            />
+                        </svg>
+                    </motion.div>
 
-                    {/* Decorative line */}
+                    {/* Summary text with cinematic reveal */}
+                    <div className="relative z-10">
+                        <CinematicText text={portfolioData.summary} />
+                    </div>
+
+                    {/* Scientific line divider */}
                     <motion.div
                         initial={{ scaleX: 0 }}
                         animate={isInView ? { scaleX: 1 } : {}}
-                        transition={{ delay: 0.5, duration: 0.8 }}
-                        className="my-10 h-px bg-gradient-to-r from-primary/40 via-secondary/20 to-transparent origin-left"
+                        transition={{ delay: 0.6, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                        className="my-10 h-[1px] bg-gradient-to-r from-primary/0 via-primary/50 to-primary/0 origin-center"
                     />
 
                     {/* Highlight cards grid */}
-                    <div className="grid md:grid-cols-2 gap-6">
+                    <div className="grid md:grid-cols-2 gap-6 relative z-10">
                         <HighlightCard
-                            icon={Target}
+                            icon={Microscope}
                             title="Current Focus"
-                            description="Building protein mutation prediction pipelines with ESM-3 + AlphaFold at Leibniz Institute for Plant Biochemistry"
-                            variant="primary"
+                            description={portfolioData.highlights.currentFocus}
+                            accent="cyan"
                             delay={0.4}
                         />
                         <HighlightCard
-                            icon={Zap}
+                            icon={Target}
                             title="My Mission"
-                            description="Leveraging AI to decode the molecular language of life and engineer solutions that matter"
-                            variant="secondary"
-                            delay={0.5}
+                            description={portfolioData.highlights.mission}
+                            accent="green"
+                            delay={0.6}
                         />
                     </div>
                 </motion.div>
 
                 {/* Bottom tagline */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ delay: 0.7, duration: 0.6 }}
-                    className="flex items-center gap-4"
+                    initial={{ opacity: 0 }}
+                    animate={isInView ? { opacity: 1 } : {}}
+                    transition={{ delay: 1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                    className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-4 px-4"
                 >
-                    <FlaskConical className="w-5 h-5 text-primary" />
-                    <span className="font-mono text-sm text-paper-muted">
-                        Passionate about transforming biological data into actionable insights
+                    <div className="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center bg-primary/5">
+                        <FlaskConical className="w-5 h-5 text-primary" />
+                    </div>
+                    <span className="font-mono text-xs text-paper-muted uppercase tracking-widest text-center sm:text-left">
+                        Bridging intestinal immunology with AI-driven discovery
                     </span>
                 </motion.div>
             </div>

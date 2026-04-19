@@ -1,189 +1,138 @@
 "use client";
 
-import React, { useRef } from "react";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import React, { useRef, useState, useEffect } from "react";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import { portfolioData } from "@/lib/data";
-import { GraduationCap, MapPin, Award, ArrowRight } from "lucide-react";
+import { GraduationCap, MapPin, Calendar, BookOpen, FlaskConical } from "lucide-react";
 
-// Timeline connector with measurement marks
-function TimelineConnector() {
-    return (
-        <div className="relative w-0.5 h-full min-h-[100px] bg-white/10">
-            {/* Measurement marks */}
-            {[...Array(5)].map((_, i) => (
-                <div
-                    key={i}
-                    className="absolute w-2 h-px bg-primary/30"
-                    style={{ top: `${(i + 1) * 20}%`, left: '-3px' }}
-                />
-            ))}
-
-            {/* Animated pulse */}
-            <motion.div
-                animate={{
-                    top: ["0%", "100%", "0%"],
-                    opacity: [0, 1, 0]
-                }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute left-1/2 -translate-x-1/2 w-1.5 h-4 bg-primary/50"
-            />
-        </div>
-    );
-}
-
-// Timeline node
-function TimelineNode({ isActive = false }: { isActive?: boolean }) {
-    return (
-        <div className="relative">
-            <div className={`w-4 h-4 border-2 ${isActive ? 'border-primary bg-primary/20' : 'border-secondary bg-secondary/20'}`} />
-            {isActive && (
-                <motion.div
-                    className="absolute inset-0 border-2 border-primary"
-                    animate={{ scale: [1, 1.5, 1], opacity: [1, 0, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                />
-            )}
-        </div>
-    );
-}
-
-// Education card
 function EducationCard({
     education,
     index,
-    isLast = false
+    isLast
 }: {
     education: typeof portfolioData.education[0];
     index: number;
-    isLast?: boolean;
+    isLast: boolean;
 }) {
     const cardRef = useRef<HTMLDivElement>(null);
-    const isInView = useInView(cardRef, { once: true, margin: "-50px" });
-    const isActive = education.year.includes("Present");
+    const isInView = useInView(cardRef, { once: true, margin: "-100px" });
 
-    const borderColor = isActive ? "border-primary" : "border-secondary";
-    const shadowColor = isActive ? "4px 4px 0px 0px #FFB800" : "4px 4px 0px 0px #22C55E";
-    const hoverShadow = isActive ? "6px 6px 0px 0px #FFB800" : "6px 6px 0px 0px #22C55E";
+    // SVG Beaker Draw effect + Liquid Fill
+    const BeakerIcon = () => (
+        <div className="relative w-12 h-12 flex items-center justify-center flex-shrink-0">
+            {/* Outline draw */}
+            <svg viewBox="0 0 24 24" fill="none" className="absolute inset-0 w-full h-full text-primary drop-shadow-[0_0_8px_rgba(0,245,212,0.5)]">
+                <motion.path
+                    initial={{ pathLength: 0 }}
+                    animate={isInView ? { pathLength: 1 } : {}}
+                    transition={{ duration: 1.5, ease: "easeInOut", delay: index * 0.2 }}
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a2 2 0 0 0 1.79 2.95h11.98a2 2 0 0 0 1.79-2.95l-5.068-10.127A2 2 0 0 1 14 9.527V2h-4Z"
+                />
+                <motion.path
+                    initial={{ pathLength: 0 }}
+                    animate={isInView ? { pathLength: 1 } : {}}
+                    transition={{ duration: 0.5, ease: "easeInOut", delay: index * 0.2 }}
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    d="M8.5 2h7"
+                />
+            </svg>
+            
+            {/* Liquid Fill animation */}
+            <div className="absolute inset-x-[20%] bottom-[15%] top-[45%] overflow-hidden" 
+                 style={{ clipPath: 'polygon(0 100%, 100% 100%, 80% 0, 20% 0)' }}>
+                <motion.div
+                    initial={{ height: "0%" }}
+                    animate={isInView ? { height: "100%" } : {}}
+                    transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.5 + index * 0.2 }}
+                    className="absolute bottom-0 inset-x-0 bg-primary/40"
+                />
+            </div>
+        </div>
+    );
 
     return (
-        <motion.div
-            ref={cardRef}
-            initial={{ opacity: 0, x: -50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ delay: index * 0.2, duration: 0.6 }}
-            className="relative flex items-start gap-6 mb-8"
-        >
-            {/* Timeline */}
-            <div className="flex flex-col items-center pt-1">
-                <TimelineNode isActive={isActive} />
-                {!isLast && <TimelineConnector />}
-            </div>
-
-            {/* Card */}
-            <motion.div
-                className={`flex-1 bg-surface border-2 ${borderColor} p-6 transition-all duration-200 group`}
-                style={{ boxShadow: shadowColor }}
-                whileHover={{ x: -2, y: -2 }}
-                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = hoverShadow)}
-                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = shadowColor)}
-            >
-                {/* Year badge */}
-                <div className="flex items-center justify-between mb-4">
-                    <div className={`inline-flex items-center gap-2 px-3 py-1 border ${isActive ? 'border-primary text-primary' : 'border-secondary text-secondary'}`}>
-                        <span className="font-mono text-xs uppercase tracking-wider">
-                            {education.year}
-                        </span>
-                        {isActive && (
-                            <motion.div
-                                animate={{ opacity: [1, 0.3, 1] }}
-                                transition={{ duration: 1.5, repeat: Infinity }}
-                                className="w-1.5 h-1.5 bg-primary"
-                            />
-                        )}
-                    </div>
-                    <GraduationCap className={`w-5 h-5 ${isActive ? 'text-primary' : 'text-secondary'}`} />
+        <div className="relative" ref={cardRef}>
+            {/* Timeline connection line - drawn downward */}
+            {!isLast && (
+                <div className="absolute left-6 top-16 bottom-[-2rem] w-px overflow-hidden">
+                     <motion.div
+                        initial={{ height: 0 }}
+                        animate={isInView ? { height: "100%" } : {}}
+                        transition={{ duration: 1.5, ease: "easeInOut", delay: 0.8 }}
+                        className="w-full h-full bg-gradient-to-b from-primary/50 via-primary/20 to-transparent"
+                    />
                 </div>
+            )}
 
-                {/* Degree */}
-                <h3 className="font-display text-xl font-semibold text-paper-cream mb-3">
-                    {education.degree}
-                </h3>
+            <div className="flex gap-6 md:gap-8 relative z-10 w-full">
+                <BeakerIcon />
 
-                {/* School */}
-                <div className="flex items-center gap-2 text-paper-muted mb-4">
-                    <MapPin className="w-4 h-4 text-primary/50" />
-                    <span className="font-body text-sm">{education.school}</span>
-                </div>
+                <motion.div
+                    initial={{ opacity: 0, x: -20, filter: "blur(5px)" }}
+                    animate={isInView ? { opacity: 1, x: 0, filter: "blur(0px)" } : {}}
+                    transition={{ duration: 0.8, delay: 0.3 + index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                    className="flex-1 glass-panel p-6 md:p-8"
+                >
+                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
+                        <div>
+                            <h3 className="font-display text-2xl font-semibold text-white mb-2">
+                                {education.degree}
+                            </h3>
+                            <div className="flex items-center gap-2 text-paper-muted font-mono text-sm">
+                                <MapPin className="w-4 h-4 text-primary" />
+                                {education.school}
+                            </div>
+                        </div>
 
-                {/* Highlight */}
-                {education.highlight && (
-                    <div className="mt-4 pt-4 border-t border-white/10">
-                        <div className="flex items-start gap-3">
-                            <Award className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                            <p className="font-body text-sm text-paper-muted leading-relaxed">
-                                {education.highlight}
-                            </p>
+                        {/* Animated amber badge for dates */}
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 glass-panel-strong border-amber-warm/30 animate-pulse-glow-amber self-start whitespace-nowrap">
+                            <Calendar className="w-4 h-4 text-tertiary" />
+                            <span className="font-mono text-xs text-tertiary">
+                                {education.year}
+                            </span>
                         </div>
                     </div>
-                )}
 
-                {/* Corner accent */}
-                <div className="absolute top-0 right-0 w-8 h-8">
-                    <div className={`absolute top-2 right-2 w-4 h-4 border-t border-r ${borderColor} opacity-50`} />
-                </div>
-            </motion.div>
-        </motion.div>
+                    {education.highlight && (
+                        <div className="mt-6 pt-4 border-t border-white/5">
+                            <div className="flex items-start gap-3">
+                                <BookOpen className="w-5 h-5 text-secondary flex-shrink-0 mt-0.5" />
+                                <p className="font-body text-paper-muted text-sm leading-relaxed">
+                                    <span className="text-secondary font-medium tracking-wide">Focus:</span> {education.highlight}
+                                </p>
+                            </div>
+                        </div>
+                    )}
+                </motion.div>
+            </div>
+        </div>
     );
 }
 
 export default function Education() {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start end", "end start"]
-    });
-
-    const opacity = useTransform(scrollYProgress, [0, 0.2], [0.5, 1]);
-
     return (
         <SectionWrapper
             id="education"
             title="Education"
-            subtitle="Academic journey through biotechnology and computational biology"
+            subtitle="Academic foundation in biotechnology and computational biology"
         >
-            <motion.div ref={containerRef} style={{ opacity }} className="relative">
-                {/* Timeline */}
-                <div className="max-w-2xl mx-auto">
-                    {portfolioData.education.map((edu, index) => (
-                        <EducationCard
-                            key={index}
-                            education={edu}
-                            index={index}
-                            isLast={index === portfolioData.education.length - 1}
-                        />
-                    ))}
-                </div>
-
-                {/* Journey indicator */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.6, duration: 0.6 }}
-                    className="mt-12 flex items-center justify-center gap-4"
-                >
-                    <div className="w-12 h-px bg-primary/30" />
-                    <span className="font-mono text-xs text-paper-muted uppercase tracking-wider">
-                        Chennai → Halle
-                    </span>
-                    <ArrowRight className="w-4 h-4 text-primary" />
-                    <span className="font-mono text-xs text-primary uppercase tracking-wider">
-                        Future
-                    </span>
-                    <div className="w-12 h-px bg-primary/30" />
-                </motion.div>
-            </motion.div>
+            <div className="max-w-4xl mx-auto space-y-8 md:space-y-12">
+                {portfolioData.education.map((edu, index) => (
+                    <EducationCard
+                        key={index}
+                        education={edu}
+                        index={index}
+                        isLast={index === portfolioData.education.length - 1}
+                    />
+                ))}
+            </div>
         </SectionWrapper>
     );
 }

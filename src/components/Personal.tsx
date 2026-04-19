@@ -6,81 +6,67 @@ import SectionWrapper from "@/components/ui/SectionWrapper";
 import { portfolioData } from "@/lib/data";
 import { Globe, Microscope, Heart } from "lucide-react";
 
-// Info card with brutalist styling
+// Info card with glass styling
 function InfoCard({
     icon: Icon,
     title,
     content,
     delay = 0,
-    variant = "primary"
+    accent = "cyan"
 }: {
     icon: React.ElementType;
     title: string;
     content: string;
     delay?: number;
-    variant?: "primary" | "secondary" | "tertiary";
+    accent?: "cyan" | "green" | "amber";
 }) {
     const cardRef = useRef<HTMLDivElement>(null);
     const isInView = useInView(cardRef, { once: true, margin: "-50px" });
 
-    const colors = {
-        primary: {
-            border: "border-primary",
-            shadow: "4px 4px 0px 0px #FFB800",
-            hoverShadow: "6px 6px 0px 0px #FFB800",
-            icon: "text-primary"
+    const styles = {
+        cyan: {
+            border: "border-primary/20 hover:border-primary/50 text-primary glow-cyan",
+            bg: "bg-primary/10",
         },
-        secondary: {
-            border: "border-secondary",
-            shadow: "4px 4px 0px 0px #22C55E",
-            hoverShadow: "6px 6px 0px 0px #22C55E",
-            icon: "text-secondary"
+        green: {
+            border: "border-secondary/20 hover:border-secondary/50 text-secondary glow-green",
+            bg: "bg-secondary/10",
         },
-        tertiary: {
-            border: "border-tertiary",
-            shadow: "4px 4px 0px 0px #F472B6",
-            hoverShadow: "6px 6px 0px 0px #F472B6",
-            icon: "text-tertiary"
+        amber: {
+            border: "border-tertiary/20 hover:border-tertiary/50 text-tertiary glow-amber",
+            bg: "bg-tertiary/10",
         }
     };
 
-    const c = colors[variant];
+    const s = styles[accent];
 
     return (
         <motion.div
             ref={cardRef}
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay, duration: 0.6 }}
+            transition={{ delay, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="group h-full"
         >
-            <motion.div
-                className={`relative bg-surface border-2 ${c.border} p-6 h-full transition-all duration-200`}
-                style={{ boxShadow: c.shadow }}
-                whileHover={{ x: -2, y: -2 }}
-                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = c.hoverShadow)}
-                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = c.shadow)}
-            >
+            <div className={`relative glass-panel p-6 md:p-8 h-full transition-all duration-300 overflow-hidden ${s.border}`}>
+                {/* Subtle gradient hover effect */}
+                <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none ${s.bg.replace('/10', '/5')}`} />
+                
                 {/* Header */}
-                <div className="flex items-center gap-4 mb-4">
-                    <div className={`w-10 h-10 border ${c.border} bg-surface flex items-center justify-center`}>
-                        <Icon className={`w-5 h-5 ${c.icon}`} />
+                <div className="flex flex-col mb-4">
+                    <div className={`w-12 h-12 rounded-full border border-white/10 flex items-center justify-center mb-4 transition-colors group-hover:border-current group-hover:shadow-[0_0_15px_currentColor] ${s.bg}`}>
+                        <Icon className="w-5 h-5" />
                     </div>
-                    <h3 className="font-display text-lg font-semibold text-paper-cream">
+                    <h3 className="font-display text-2xl font-medium text-white">
                         {title}
                     </h3>
                 </div>
 
                 {/* Content */}
-                <p className="font-body text-sm text-paper-muted leading-relaxed">
+                <p className="font-body text-paper-muted text-sm leading-relaxed group-hover:text-white transition-colors duration-300">
                     {content}
                 </p>
-
-                {/* Corner accent */}
-                <div className="absolute bottom-0 right-0 w-8 h-8">
-                    <div className={`absolute bottom-2 right-2 w-4 h-4 border-b border-r ${c.border} opacity-50`} />
-                </div>
-            </motion.div>
+            </div>
         </motion.div>
     );
 }
@@ -92,27 +78,27 @@ export default function Personal() {
             title="Beyond Research"
             subtitle="The person behind the pipette and the code"
         >
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
                 <InfoCard
                     icon={Globe}
                     title="Languages"
                     content={portfolioData.languages}
                     delay={0}
-                    variant="primary"
+                    accent="cyan"
                 />
                 <InfoCard
                     icon={Microscope}
                     title="Research Interests"
                     content={portfolioData.interests}
-                    delay={0.1}
-                    variant="secondary"
+                    delay={0.15}
+                    accent="green"
                 />
                 <InfoCard
                     icon={Heart}
                     title="Beyond the Lab"
                     content={portfolioData.hobbies}
-                    delay={0.2}
-                    variant="tertiary"
+                    delay={0.3}
+                    accent="amber"
                 />
             </div>
 
@@ -121,8 +107,8 @@ export default function Personal() {
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-                className="mt-12 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent"
+                transition={{ delay: 0.5, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                className="mt-16 h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent"
             />
         </SectionWrapper>
     );
