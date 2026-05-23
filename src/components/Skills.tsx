@@ -4,68 +4,26 @@ import React, { useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import { portfolioData } from "@/lib/data";
-import { Microscope, Code2, BrainCircuit, Quote } from "lucide-react";
+import { Microscope, Code2, BrainCircuit, Quote, Wrench } from "lucide-react";
 import gsap from "gsap";
 
-// Oscillating Orb Skill Badge
+// Pill Tag Skill Badge
 function SkillBadge({
     skill,
-    index,
     accent = "cyan"
 }: {
     skill: string;
-    index: number;
     accent?: "cyan" | "green" | "amber";
 }) {
-    const badgeRef = useRef<HTMLDivElement>(null);
-    const orbRef = useRef<HTMLDivElement>(null);
-    
-    // GSAP Ticker for smooth sine wave oscillation
-    useEffect(() => {
-        if (!orbRef.current) return;
-        
-        let phase = index * 0.5; // Offset phase per item
-        const speed = 0.05 + (Math.random() * 0.02);
-        const amplitude = 3 + (Math.random() * 2);
-        
-        const tick = () => {
-            phase += speed;
-            const yOffset = Math.sin(phase) * amplitude;
-            if (orbRef.current) {
-                gsap.set(orbRef.current, { y: yOffset });
-            }
-        };
-        
-        gsap.ticker.add(tick);
-        return () => gsap.ticker.remove(tick);
-    }, [index]);
-
     const borderConfig = {
-        cyan: "border-primary/30 group-hover:border-primary/80 glow-cyan-sm",
-        green: "border-secondary/30 group-hover:border-secondary/80 glow-green-sm",
-        amber: "border-tertiary/30 group-hover:border-tertiary/80 glow-amber-sm",
-    };
-
-    const bgConfig = {
-        cyan: "bg-primary text-primary",
-        green: "bg-secondary text-secondary",
-        amber: "bg-tertiary text-tertiary",
+        cyan: "border-primary/20 hover:border-primary/50 glow-cyan-sm bg-primary/5 hover:bg-primary/10 text-primary",
+        green: "border-secondary/20 hover:border-secondary/50 glow-green-sm bg-secondary/5 hover:bg-secondary/10 text-secondary",
+        amber: "border-tertiary/20 hover:border-tertiary/50 glow-amber-sm bg-tertiary/5 hover:bg-tertiary/10 text-tertiary",
     };
 
     return (
-        <div 
-            ref={badgeRef}
-            className="group flex flex-col items-center gap-2 p-2 hover:-translate-y-1 transition-transform duration-300"
-        >
-            <div 
-                ref={orbRef}
-                className={`w-10 h-10 rounded-full border glass-panel flex items-center justify-center transition-all duration-300 ${borderConfig[accent]}`}
-            >
-                <div className={`w-1.5 h-1.5 rounded-full shadow-[0_0_10px_currentColor] animate-pulse ${bgConfig[accent]}`} />
-            </div>
-            <span className="font-mono text-[10px] sm:text-xs text-paper-muted text-center leading-tight group-hover:text-white transition-colors">
-                {skill}
-            </span>
+        <div className={`px-3 py-1.5 rounded-full border transition-all duration-300 text-xs sm:text-sm font-mono text-center cursor-default ${borderConfig[accent]}`}>
+            {skill}
         </div>
     );
 }
@@ -106,9 +64,9 @@ function SkillCategory({
                     <h3 className="font-display text-2xl text-white font-medium">{title}</h3>
                 </div>
 
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 relative z-10">
+                <div className="flex flex-wrap gap-2 relative z-10">
                     {skills.map((skill, i) => (
-                        <SkillBadge key={i} skill={skill} index={i} accent={accent} />
+                        <SkillBadge key={i} skill={skill} accent={accent} />
                     ))}
                 </div>
             </div>
@@ -126,7 +84,7 @@ export default function Skills() {
             title="Skills & Toolkit"
             subtitle="Bridging wet-lab precision with computational biology and AI"
         >
-            <div className="flex flex-col lg:flex-row gap-6 mb-16 relative z-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16 relative z-10">
                 <SkillCategory
                     title="Wet-Lab & Genomics"
                     skills={portfolioData.skills.wet_lab}
@@ -147,6 +105,13 @@ export default function Skills() {
                     icon={BrainCircuit}
                     index={2}
                     accent="cyan"
+                />
+                <SkillCategory
+                    title="Tools & Technologies"
+                    skills={portfolioData.skills.tools}
+                    icon={Wrench}
+                    index={3}
+                    accent="amber"
                 />
             </div>
 

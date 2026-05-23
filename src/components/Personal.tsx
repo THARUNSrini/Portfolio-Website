@@ -43,8 +43,8 @@ function InfoCard({
     return (
         <motion.div
             ref={cardRef}
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            initial={{ opacity: 0, clipPath: 'inset(100% 0 0 0)' }}
+            animate={isInView ? { opacity: 1, clipPath: 'inset(0% 0 0 0)' } : {}}
             transition={{ delay, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="group h-full"
         >

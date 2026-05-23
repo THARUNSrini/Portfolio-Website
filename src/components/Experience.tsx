@@ -59,15 +59,15 @@ function ThesisCard({
     return (
         <motion.div
             ref={cardRef}
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            initial={{ opacity: 0, clipPath: 'inset(100% 0 0 0)' }}
+            animate={isInView ? { opacity: 1, clipPath: 'inset(0% 0 0 0)' } : {}}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="w-full mb-12 relative"
         >
             <div className="glass-panel-glow p-8 md:p-10 border-primary/30 relative overflow-hidden group">
                 {/* Background animated hexagon grid specific to this card */}
                 <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none" style={{
-                    backgroundImage: `radial-gradient(circle at 1px 1px, #00f5d4 1px, transparent 1px)`,
+                    backgroundImage: `radial-gradient(circle at 1px 1px, #00e5cc 1px, transparent 1px)`,
                     backgroundSize: '20px 20px',
                     animation: 'hex-breathe 8s ease-in-out infinite'
                 }} />
@@ -115,8 +115,8 @@ function ThesisCard({
                             {experience.arms.map((arm, armIdx) => (
                                 <motion.div 
                                     key={armIdx}
-                                    initial={{ opacity: 0, x: armIdx === 0 ? -20 : 20 }}
-                                    animate={isInView ? { opacity: 1, x: 0 } : {}}
+                                    initial={{ opacity: 0, clipPath: 'inset(100% 0 0 0)' }}
+                                    animate={isInView ? { opacity: 1, clipPath: 'inset(0% 0 0 0)' } : {}}
                                     transition={{ delay: 0.4 + (armIdx * 0.2), duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                                     className="flex-1 glass-panel p-6 border-white/5 hover:border-primary/20 transition-colors"
                                 >
@@ -162,8 +162,8 @@ function ExperienceItem({
     return (
         <motion.div
             ref={itemRef}
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            initial={{ opacity: 0, clipPath: 'inset(100% 0 0 0)' }}
+            animate={isInView ? { opacity: 1, clipPath: 'inset(0% 0 0 0)' } : {}}
             transition={{ delay: 0.2 + (index * 0.1), duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="flex gap-4 md:gap-8 group relative"
         >

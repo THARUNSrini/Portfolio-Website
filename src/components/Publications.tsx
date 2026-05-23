@@ -101,8 +101,8 @@ export default function Publications() {
 
                 {/* Publication count */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, clipPath: 'inset(100% 0 0 0)' }}
+                    whileInView={{ opacity: 1, clipPath: 'inset(0% 0 0 0)' }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.5, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                     className="mt-12 flex items-center gap-4 justify-center"

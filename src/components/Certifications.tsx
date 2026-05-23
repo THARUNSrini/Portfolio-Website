@@ -25,7 +25,7 @@ function CertificationItem({
             transition={{ delay: index * 0.08, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="group"
         >
-            <div className="flex items-center gap-4 p-4 glass-panel border-white/5 hover:border-primary/40 transition-all duration-300 hover:translate-x-1 hover:shadow-[0_0_15px_rgba(0,245,212,0.15)] overflow-hidden relative">
+            <div className="flex items-center gap-4 p-4 glass-panel border-white/5 hover:border-primary/40 transition-all duration-300 hover:translate-x-1 hover:shadow-[0_0_15px_rgba(0,229,204,0.15)] overflow-hidden relative">
                 {/* Subtle hover gradient */}
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/0 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
@@ -55,8 +55,8 @@ export default function Certifications() {
 
             {/* Learning indicator */}
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, clipPath: 'inset(100% 0 0 0)' }}
+                whileInView={{ opacity: 1, clipPath: 'inset(0% 0 0 0)' }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.5, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                 className="mt-12 flex items-center justify-center gap-4"

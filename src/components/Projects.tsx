@@ -4,7 +4,8 @@ import React, { useRef, useState, useEffect } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import { portfolioData } from "@/lib/data";
-import { Github, ExternalLink, Dna, Database, Terminal, Cpu, X, ChevronRight, Activity } from "lucide-react";
+import { Github, ExternalLink, Dna, Database, Terminal, Cpu, X, ChevronRight, Activity, MousePointerClick } from "lucide-react";
+import { ProjectsDecorations } from "@/components/SectionDecorations";
 
 // Determine icon based on tech stack
 const getProjectIcon = (tech: string) => {
@@ -150,6 +151,11 @@ function ProjectCard({
                                 <span className="font-mono text-[10px] text-paper-muted pt-1">...</span>
                             )}
                         </div>
+                    </div>
+                    {/* Tooltip */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none flex flex-col items-center gap-2 bg-background/80 backdrop-blur-sm p-4 rounded-xl border border-primary/30 text-primary shadow-[0_0_20px_rgba(0,229,204,0.4)] z-20">
+                        <MousePointerClick className="w-8 h-8 animate-bounce" />
+                        <span className="font-mono text-sm tracking-widest uppercase font-bold">Click to Expand</span>
                     </div>
                 </div>
             </motion.div>
@@ -300,6 +306,8 @@ export default function Projects() {
             title="Projects"
             subtitle="Bridging biology and computer science through applied research"
         >
+            <ProjectsDecorations />
+            
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
                 {portfolioData.projects.map((project, index) => (
                     <ProjectCard 

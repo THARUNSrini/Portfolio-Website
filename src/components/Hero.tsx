@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import LabScene from "@/components/3d/LabScene";
+import { HeroDecorations } from "@/components/SectionDecorations";
 import { portfolioData } from "@/lib/data";
 import { Linkedin, Mail, MapPin } from "lucide-react";
 
@@ -71,14 +71,13 @@ function SocialLink({
             target="_blank"
             rel="noopener noreferrer"
             className="group relative flex items-center gap-3 px-5 py-3 glass-panel transition-all duration-300"
-            whileHover={{ y: -2 }}
         >
             <Icon className="w-5 h-5 text-paper-muted group-hover:text-primary transition-colors" />
             <span className="font-mono text-sm text-paper-muted group-hover:text-primary transition-colors">
                 {label}
             </span>
             <div className="absolute inset-0 rounded-xl rounded-m bg-primary/0 group-hover:bg-primary/5 transition-colors pointer-events-none" />
-            <div className="absolute inset-0 rounded-xl border border-primary/0 group-hover:border-primary/30 transition-colors shadow-[0_0_15px_rgba(0,245,212,0)] group-hover:shadow-[0_0_15px_rgba(0,245,212,0.2)] pointer-events-none" />
+            <div className="absolute inset-0 rounded-xl border border-primary/0 group-hover:border-primary/30 transition-colors shadow-[0_0_15px_rgba(0,229,204,0)] group-hover:shadow-[0_0_15px_rgba(0,229,204,0.2)] pointer-events-none" />
         </motion.a>
     );
 }
@@ -104,16 +103,10 @@ export default function Hero() {
 
     return (
         <section
-            ref={sectionRef}
             id="hero"
             className="relative min-h-screen w-full flex items-center justify-center overflow-hidden py-20"
         >
-            {/* Mobile Fallback or 3D Scene */}
-            {isMobile ? (
-                <div className="absolute inset-0 z-0 mobile-gradient-fallback w-full h-full" />
-            ) : (
-                <LabScene variant="hero" className="z-0 opacity-80" />
-            )}
+            <HeroDecorations />
 
             {/* Gradient overlays to blend with the body background */}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/40 to-background z-[1] pointer-events-none" />
@@ -125,14 +118,14 @@ export default function Hero() {
             >
                 {/* Hero Portrait / Scanner Area */}
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, clipPath: 'circle(0% at 50% 50%)' }}
+                    animate={{ opacity: 1, clipPath: 'circle(100% at 50% 50%)' }}
                     transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
                     className="relative w-32 h-32 md:w-40 md:h-40 mx-auto mb-10 flex items-center justify-center"
                 >
                     <div className="absolute inset-0 scanner-ring" />
                     {/* Placeholder for portrait photo using frosted glass */}
-                    <div className="w-full h-full rounded-full glass-panel-strong flex items-center justify-center overflow-hidden bg-background/50 border-primary/20 shadow-[0_0_30px_rgba(0,245,212,0.1)]">
+                    <div className="w-full h-full rounded-full glass-panel-strong flex items-center justify-center overflow-hidden bg-background/50 border-primary/20 shadow-[0_0_30px_rgba(0,229,204,0.1)]">
                         <span className="font-display text-4xl text-primary/40 font-light">TS</span>
                     </div>
                 </motion.div>
@@ -161,8 +154,8 @@ export default function Hero() {
 
                 {/* Social links */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, clipPath: 'inset(100% 0 0 0)' }}
+                    animate={{ opacity: 1, clipPath: 'inset(0% 0 0 0)' }}
                     transition={{ delay: 2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                     className="flex flex-wrap justify-center items-center gap-4"
                 >

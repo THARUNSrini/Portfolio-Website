@@ -4,29 +4,29 @@
 
 :root {
   /* Cinematic Bioluminescent Lab palette */
-  --bg-deep: #050d1a;
-  --bg-surface: rgba(10, 25, 47, 0.6);
-  --bg-elevated: rgba(15, 35, 60, 0.7);
+  --bg-deep: #0a0d0f;
+  --bg-surface: #0f1318;
+  --bg-elevated: #141920;
 
-  --cyan-primary: #00f5d4;
-  --cyan-light: #72fce8;
-  --cyan-dark: #00c4a7;
+  --cyan-primary: #00e5cc;
+  --cyan-light: #33ebd6;
+  --cyan-dark: #00b3a0;
 
-  --green-primary: #39ff14;
-  --green-light: #7aff5a;
-  --green-dark: #2acc10;
+  --green-primary: #00c8ff;
+  --green-light: #33d3ff;
+  --green-dark: #00a0cc;
 
   --amber-warm: #FFB800;
   --amber-light: #FFCC33;
 
   --rose-accent: #F472B6;
 
-  --text-primary: #e0f7fa;
-  --text-muted: #7aa2b3;
-  --text-dim: #4a6a7a;
+  --text-primary: #e8eaec;
+  --text-muted: #8a9099;
+  --text-dim: #4a5260;
 
-  --glow-cyan: rgba(0, 245, 212, 0.5);
-  --glow-green: rgba(57, 255, 20, 0.4);
+  --glow-cyan: rgba(0, 229, 204, 0.5);
+  --glow-green: rgba(0, 200, 255, 0.4);
   --glow-amber: rgba(255, 184, 0, 0.5);
 }
 
@@ -125,11 +125,11 @@ body::after {
    TYPOGRAPHY UTILITIES
    ============================================ */
 .font-display {
-  font-family: 'Clash Display', system-ui, sans-serif;
+  font-family: 'Instrument Serif', Georgia, serif;
 }
 
 .font-body {
-  font-family: 'Satoshi', system-ui, sans-serif;
+  font-family: 'Satoshi', 'Inter', sans-serif;
 }
 
 .font-mono {
@@ -137,8 +137,8 @@ body::after {
 }
 
 .heading-display {
-  font-family: 'Clash Display', system-ui, sans-serif;
-  font-weight: 600;
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-weight: normal;
   letter-spacing: -0.02em;
   line-height: 1.1;
 }
@@ -218,10 +218,10 @@ body::after {
 
 /* Frosted navigation */
 .frosted-nav {
-  background: rgba(5, 13, 26, 0.8);
+  background: rgba(10, 13, 15, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(0, 245, 212, 0.06);
+  border-bottom: 1px solid rgba(0, 229, 204, 0.06);
 }
 
 /* ============================================
@@ -434,7 +434,16 @@ button:focus-visible {
 /* Glowing focus ring for inputs */
 input:focus, textarea:focus {
   outline: none;
-  box-shadow: 0 0 0 2px var(--cyan-primary), 0 0 15px rgba(0, 245, 212, 0.2);
+  box-shadow: 0 0 0 2px var(--cyan-primary), 0 0 15px rgba(0, 229, 204, 0.2);
+}
+
+/* ============================================
+   CUSTOM CURSOR
+   ============================================ */
+@media (hover: hover) and (pointer: fine) {
+  *, *::before, *::after {
+    cursor: none !important;
+  }
 }
 
 /* ============================================

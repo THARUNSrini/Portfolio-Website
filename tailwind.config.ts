@@ -10,19 +10,19 @@ const config: Config = {
         extend: {
             colors: {
                 // Cinematic Bioluminescent Lab palette
-                background: "#050d1a",
-                surface: "#0a192f",
-                "surface-elevated": "#0f233c",
+                background: "#0a0d0f",
+                surface: "#0f1318",
+                "surface-elevated": "#141920",
 
-                // Primary — Bioluminescent Cyan
-                primary: "#00f5d4",
-                "primary-light": "#72fce8",
-                "primary-dark": "#00c4a7",
+                // Primary — Bioluminescent Teal
+                primary: "#00e5cc",
+                "primary-light": "#33ebd6",
+                "primary-dark": "#00b3a0",
 
-                // Secondary — Neon Green (lab glow)
-                secondary: "#39ff14",
-                "secondary-light": "#7aff5a",
-                "secondary-dark": "#2acc10",
+                // Secondary — Electric Cyan
+                secondary: "#00c8ff",
+                "secondary-light": "#33d3ff",
+                "secondary-dark": "#00a0cc",
 
                 // Tertiary — Warm Amber (CTAs only)
                 tertiary: "#FFB800",
@@ -36,9 +36,9 @@ const config: Config = {
                 graphBlue: "#3B82F6",
 
                 // Text
-                "paper-cream": "#e0f7fa",
-                "paper-muted": "#7aa2b3",
-                "paper-dim": "#4a6a7a",
+                "paper-cream": "#e8eaec",
+                "paper-muted": "#8a9099",
+                "paper-dim": "#4a5260",
             },
             backgroundImage: {
                 "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
@@ -49,8 +49,8 @@ const config: Config = {
                 "gradient-warm": "linear-gradient(135deg, #FFB800 0%, #F472B6 100%)",
             },
             fontFamily: {
-                display: ["'Clash Display'", 'system-ui', 'sans-serif'],
-                body: ["'Satoshi'", 'system-ui', 'sans-serif'],
+                display: ["'Instrument Serif'", 'Georgia', 'serif'],
+                body: ["'Satoshi'", "'Inter'", 'sans-serif'],
                 mono: ["'JetBrains Mono'", "'Fira Code'", 'monospace'],
             },
             animation: {

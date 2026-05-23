@@ -78,22 +78,15 @@ export default function Navbar() {
                                 <a
                                     key={link.name}
                                     href={link.href}
-                                    className={`relative px-4 py-2 font-body text-sm font-medium tracking-wider transition-colors ${
+                                    className={`relative px-4 py-2 font-body text-sm font-medium tracking-wider transition-colors group ${
                                         activeSection === link.href.slice(1)
-                                            ? "text-primary drop-shadow-[0_0_8px_rgba(0,245,212,0.8)]"
+                                            ? "text-primary border-l-2 border-primary drop-shadow-[0_0_8px_rgba(0,229,204,0.8)]"
                                             : "text-paper-muted hover:text-white"
                                     }`}
                                 >
                                     {link.name}
-                                    {activeSection === link.href.slice(1) && (
-                                        <motion.div
-                                            layoutId="activeSectionIndicator"
-                                            className="absolute bottom-0 left-0 w-full h-0.5 bg-primary shadow-[0_0_10px_rgba(0,245,212,0.6)]"
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            transition={{ duration: 0.3 }}
-                                        />
-                                    )}
+                                    {/* Hover underline */}
+                                    <span className="absolute bottom-0 left-0 w-full h-[2px] bg-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></span>
                                 </a>
                             ))}
                         </div>
@@ -134,7 +127,7 @@ export default function Navbar() {
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className={`block px-4 py-3 font-body font-medium rounded-lg transition-colors ${
                                         activeSection === link.href.slice(1)
-                                            ? "bg-primary/10 text-primary border border-primary/20"
+                                            ? "bg-primary/10 text-primary border-l-2 border-primary"
                                             : "text-paper-muted hover:text-white hover:bg-white/5"
                                     }`}
                                 >

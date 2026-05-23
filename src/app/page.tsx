@@ -8,7 +8,7 @@ import Skills from "@/components/Skills";
 import Certifications from "@/components/Certifications";
 import Personal from "@/components/Personal";
 import Contact from "@/components/Contact";
-import CinematicTransition from "@/components/ui/CinematicTransition";
+import LabBenchDivider from "@/components/ui/LabBenchDivider";
 
 export default function Home() {
     return (
@@ -16,46 +16,46 @@ export default function Home() {
             {/* 1. HERO */}
             <Hero />
 
-            <CinematicTransition variant="dna-strand" />
+            <LabBenchDivider iconType="dna" />
 
             {/* 2. ABOUT */}
             <About />
 
-            <CinematicTransition variant="molecular-wipe" />
+            <LabBenchDivider iconType="beaker" />
 
             {/* 3. EDUCATION */}
             <Education />
 
-            <CinematicTransition variant="cell-division" />
+            <LabBenchDivider iconType="pipette" />
 
             {/* 4. EXPERIENCE & PROJECTS */}
             <Experience />
 
-            <CinematicTransition variant="particle-burst" />
+            <LabBenchDivider iconType="flask" />
 
             <Projects />
 
-            <CinematicTransition variant="dna-strand" />
+            <LabBenchDivider iconType="dna" />
 
             {/* 5. PUBLICATIONS */}
             <Publications />
 
-            <CinematicTransition variant="molecular-wipe" />
+            <LabBenchDivider iconType="beaker" />
 
             {/* 6. SKILLS */}
             <Skills />
 
-            <CinematicTransition variant="cell-division" />
+            <LabBenchDivider iconType="pipette" />
 
             {/* 7. CERTIFICATIONS */}
             <Certifications />
 
-            <CinematicTransition variant="particle-burst" />
+            <LabBenchDivider iconType="flask" />
 
             {/* 8. PERSONAL - Languages, Interests, Hobbies */}
             <Personal />
 
-            <CinematicTransition variant="dna-strand" />
+            <LabBenchDivider iconType="dna" />
 
             {/* 9. CONTACT */}
             <Contact />

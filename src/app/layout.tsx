@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import LenisProvider from "@/components/LenisProvider";
+import MicropipetteCursor from "@/components/MicropipetteCursor";
+import LabCanvas from "@/components/LabCanvas";
+import ScrollTrace from "@/components/ScrollTrace";
+import LoadingScreen from "@/components/LoadingScreen";
 import { cn } from "@/utils/cn";
 
 export const metadata: Metadata = {
@@ -27,9 +31,9 @@ export const metadata: Metadata = {
         "Machine Learning",
         "Bioinformatics",
         "Computational Biology",
-        "Pharmaceutical Biotechnology",
         "Martin Luther University",
-        "Leibniz Institute"
+        "Leibniz Institute",
+        "Freiburg"
     ],
     authors: [{ name: "Tharun Srinivasan Sudha" }],
     creator: "Tharun Srinivasan Sudha",
@@ -71,11 +75,20 @@ export default function RootLayout({
     return (
         <html lang="en" className="scroll-smooth">
             <head>
-                <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet" />
+                <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+                <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+                {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+                <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+                {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+                <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
             </head>
             <body className={cn(
                 "font-body min-h-screen text-white antialiased"
             )}>
+                <LoadingScreen />
+                <MicropipetteCursor />
+                <LabCanvas />
+                <ScrollTrace />
                 <LenisProvider>
                     <Navbar />
                     {children}

@@ -16,7 +16,7 @@ export const portfolioData = {
         phone: "+91 9566036062",
         email: "tharunsrinivasan06@gmail.com",
         linkedin: "https://www.linkedin.com/in/tharun-s-s",
-        location: "Freiburg / Halle, Germany"
+        location: "Freiburg, Baden-Württemberg, Germany"
     },
     summary: "Computational immunologist bridging wet-lab precision with AI-driven discovery. Currently at University Hospital Freiburg — performing single-cell analysis of γδ T cells in IBD and investigating BTN/BTNL epithelial regulation. 4 peer-reviewed publications across scRNA-seq, organoid culture, and deep learning.",
     highlights: {
@@ -26,7 +26,7 @@ export const portfolioData = {
     education: [
         {
             degree: "MSc Pharmaceutical and Industrial Biotechnology",
-            school: "Martin Luther University Halle-Wittenberg, Germany",
+            school: "University of Freiburg, Baden-Württemberg, Germany",
             year: "2024 – Present",
             highlight: "Thesis: γδ T cell single-cell analysis (Univ. Hospital Freiburg). Minor: ML pipelines for protein optimization (Leibniz Institute)"
         },
@@ -68,7 +68,7 @@ export const portfolioData = {
         },
         {
             title: "Master's Minor Project",
-            organization: "Computational Bioorganic Chemistry, Leibniz Institute for Plant Biochemistry, Halle",
+            organization: "Computational Bioorganic Chemistry, Leibniz Institute for Plant Biochemistry",
             status: "9 months",
             description: "ESM-3 + AlphaFold protein mutation prediction pipelines using Bayesian neural networks"
         },
@@ -188,39 +188,68 @@ export const portfolioData = {
     ],
     skills: {
         wet_lab: [
-            "scRNA-seq",
-            "TCR Profiling",
-            "FACS / Flow Cytometry",
-            "3D Organoid Culture",
-            "2D Monolayer Culture",
-            "Mammalian Cell Culture",
-            "RNA Isolation & PCR",
-            "Gene Expression Analysis",
-            "TEER Barrier Assays",
-            "Cytokine Screens",
-            "Protein Purification",
-            "Spectrophotometry"
+            "Western Blotting", "ELISA (enzyme-linked immunosorbent assay)", "SDS-PAGE",
+            "Flow Cytometry (FACS)", "Cell Sorting", "Immunofluorescence (IF)",
+            "Immunohistochemistry (IHC)", "Confocal Microscopy", "CRISPR/Cas9",
+            "PCR & qRT-PCR", "Gel Electrophoresis", "Colony PCR", "Transfection",
+            "Cell Culture (mammalian & bacterial)", "Aseptic Technique",
+            "Size Exclusion Chromatography (SEC)", "Affinity Chromatography (IMAC)",
+            "Ion Exchange Chromatography", "HPLC", "Protein Purification",
+            "Bacterial Expression (E. coli BL21)", "Refolding & Dialysis",
+            "Bradford & BCA Protein Assays", "Enzyme Kinetics Assays",
+            "Basic Molecular Cloning", "Restriction Digestion & Ligation",
+            "Gibson Assembly", "Transformation & Selection",
+            "Drug Toxicity Assays (MTT/XTT)", "ELISA Plate Reader Operations",
+            "Biosafety Level 2 Practices", "Buffer Preparation & Titration",
+            "Micropipette Calibration & Usage", "Cryopreservation"
         ],
         computational: [
-            "Python",
-            "R (Seurat, Scanpy)",
-            "C/C++",
-            "SQL",
-            "MATLAB",
-            "scRNA-seq Pipelines",
-            "Atlas Integration",
-            "CRISPR gRNA Design",
-            "Molecular Docking",
-            "Protein Structure Prediction"
+            "scRNA-seq Analysis (Seurat, Scanpy)", "TCR/BCR Repertoire Analysis",
+            "Trajectory Inference (Monocle, RNA velocity)", "UMAP / t-SNE / PCA",
+            "Differential Gene Expression (DESeq2, edgeR, Limma)",
+            "Bulk RNA-seq Pipeline (STAR, HISAT2, featureCounts, Salmon)",
+            "Genome Assembly & Annotation", "Variant Calling (GATK, bcftools)",
+            "GSEA & Pathway Enrichment (clusterProfiler, fgsea)",
+            "Single-cell Multiomics (CITE-seq, ATAC-seq integration)",
+            "Protein Structure Prediction (AlphaFold2, ESMFold)",
+            "Molecular Docking (AutoDock Vina, Glide)",
+            "Multiple Sequence Alignment (MUSCLE, CLUSTALW)",
+            "Phylogenetic Analysis (IQ-TREE, BEAST)",
+            "BLAST", "UniProt", "Ensembl", "PDB annotation",
+            "Nextflow / Snakemake Pipelines",
+            "Docker & Conda Environments",
+            "HPC / SLURM Job Scheduling",
+            "Linux / Bash scripting", "Git & GitHub",
+            "R (ggplot2, tidyverse, Bioconductor)", "Python (pandas, numpy, scipy, matplotlib, seaborn)"
         ],
         ai: [
-            "PyTorch",
-            "ESM-3",
-            "AlphaFold",
-            "Bayesian Neural Networks",
-            "Generative AI",
-            "Machine Learning",
-            "Prompt Engineering"
+            "Supervised Learning (Random Forest, SVM, XGBoost, Gradient Boosting)",
+            "Unsupervised Learning (K-means, DBSCAN, Hierarchical Clustering)",
+            "Deep Learning (PyTorch, TensorFlow/Keras)",
+            "Convolutional Neural Networks (CNN) for image & sequence data",
+            "Recurrent Neural Networks (LSTM, GRU) for time-series omics",
+            "Transformer Models & Attention Mechanisms (BERT, protein language models)",
+            "Graph Neural Networks (GNN) for biological networks",
+            "Bayesian Neural Networks (BNN) for uncertainty quantification",
+            "Transfer Learning & Fine-tuning (ESM-2, BioBERT)",
+            "AutoML (TPOT, AutoSklearn)",
+            "Explainability (SHAP, LIME, GradCAM)",
+            "Hyperparameter Tuning (Optuna, Ray Tune)",
+            "Cross-validation & Model Evaluation (AUC-ROC, Precision-Recall, RMSE, MAE)",
+            "Feature Engineering & Selection for high-dimensional omics data",
+            "Multi-task Learning for multi-omics integration",
+            "Generative Models (VAE, GAN) for data augmentation",
+            "Scikit-learn", "Scanpy ML modules",
+            "Weights & Biases (experiment tracking)", "MLflow"
+        ],
+        tools: [
+            "Python", "R", "Bash/Shell", "SQL (SQLite, PostgreSQL)",
+            "VS Code", "RStudio", "Jupyter Notebooks",
+            "Git & GitHub", "Docker", "Conda/Mamba",
+            "SLURM / HPC", "AWS (basic)", "Google Colab",
+            "LaTeX & BioRender (scientific visualization)",
+            "Fiji/ImageJ (image analysis)", "FlowJo (flow cytometry analysis)",
+            "GraphPad Prism", "Excel/Google Sheets"
         ]
     },
     certifications: [

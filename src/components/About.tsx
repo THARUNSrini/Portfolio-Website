@@ -5,6 +5,7 @@ import { motion, useInView } from "framer-motion";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import { portfolioData } from "@/lib/data";
 import { Target, Zap, FlaskConical, Microscope } from "lucide-react";
+import { AboutDecorations } from "@/components/SectionDecorations";
 
 // Highlight Card with Frosted Glass
 function HighlightCard({
@@ -85,6 +86,7 @@ export default function About() {
             title="About Me"
             subtitle="Where single-cell genomics meets computational immunology"
         >
+            <AboutDecorations />
             <div ref={contentRef} className="relative z-10 w-full max-w-5xl mx-auto">
                 {/* Main content glass panel */}
                 <motion.div
@@ -95,7 +97,7 @@ export default function About() {
                 >
                     {/* Background SVG Grid Pattern inside the panel */}
                     <div className="absolute inset-0 opacity-10 pointer-events-none" style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0l20 10v20L20 40 0 30V10z' fill-rule='evenodd' stroke='%2300f5d4' stroke-width='1' fill='none'/%3E%3C/svg%3E")`,
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0l20 10v20L20 40 0 30V10z' fill-rule='evenodd' stroke='%2300e5cc' stroke-width='1' fill='none'/%3E%3C/svg%3E")`,
                         backgroundSize: '40px 40px'
                     }} />
 
@@ -106,7 +108,7 @@ export default function About() {
                         transition={{ delay: 0.5, duration: 1 }}
                         className="absolute -right-10 -bottom-10 pointer-events-none"
                     >
-                         <svg width="200" height="200" viewBox="0 0 24 24" fill="none" stroke="#00f5d4" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round">
+                         <svg width="200" height="200" viewBox="0 0 24 24" fill="none" stroke="#00e5cc" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round">
                             <motion.path 
                                 initial={{ pathLength: 0 }}
                                 animate={isInView ? { pathLength: 1 } : {}}

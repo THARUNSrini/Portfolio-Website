@@ -6,6 +6,7 @@ import { gsap } from "gsap";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import { portfolioData } from "@/lib/data";
 import { Mail, Linkedin, MapPin, Send, Atom, ArrowRight, Dna } from "lucide-react";
+import { ContactDecorations } from "@/components/SectionDecorations";
 
 // Animated headline
 function AnimatedHeadline({ text }: { text: string }) {
@@ -34,7 +35,7 @@ function AnimatedHeadline({ text }: { text: string }) {
             {text.split('').map((char, i) => (
                 <span
                     key={i}
-                    className={`letter opacity-0 ${char === ' ' ? 'w-4' : 'text-white drop-shadow-[0_0_15px_rgba(0,245,212,0.3)]'}`}
+                    className={`letter opacity-0 ${char === ' ' ? 'w-4' : 'text-white drop-shadow-[0_0_15px_rgba(0,229,204,0.3)]'}`}
                 >
                     {char}
                 </span>
@@ -127,10 +128,11 @@ export default function Contact() {
             subtitle="Let's collaborate on the future of genomic medicine"
         >
             <div className="relative">
+                <ContactDecorations />
                 {/* Background animated petri dish colonies */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-2xl pointer-events-none z-0 opacity-30 blur-2xl">
                     <div className="absolute top-[20%] left-[20%] w-32 h-32 petri-colony" style={{ animationDelay: '0s' }} />
-                    <div className="absolute top-[60%] right-[30%] w-48 h-48 petri-colony" style={{ animationDelay: '1s', background: 'radial-gradient(circle, rgba(57,255,20,0.5), transparent 70%)' }} />
+                    <div className="absolute top-[60%] right-[30%] w-48 h-48 petri-colony" style={{ animationDelay: '1s', background: 'radial-gradient(circle, rgba(0,200,255,0.5), transparent 70%)' }} />
                     <div className="absolute bottom-[20%] left-[40%] w-24 h-24 petri-colony" style={{ animationDelay: '2s' }} />
                 </div>
 
